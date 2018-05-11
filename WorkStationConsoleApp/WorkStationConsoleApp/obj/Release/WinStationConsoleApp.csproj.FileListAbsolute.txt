@@ -1,0 +1,6 @@
+c:\users\lcm\source\repos\WorkStationConsoleApp\WorkStationConsoleApp\bin\Release\WorkStationConsoleApp.exe.config
+c:\users\lcm\source\repos\WorkStationConsoleApp\WorkStationConsoleApp\bin\Release\WorkStationConsoleApp.exe
+c:\users\lcm\source\repos\WorkStationConsoleApp\WorkStationConsoleApp\bin\Release\WorkStationConsoleApp.pdb
+c:\users\lcm\source\repos\WorkStationConsoleApp\WorkStationConsoleApp\obj\Release\WinStationConsoleApp.csproj.CoreCompileInputs.cache
+c:\users\lcm\source\repos\WorkStationConsoleApp\WorkStationConsoleApp\obj\Release\WorkStationConsoleApp.exe
+c:\users\lcm\source\repos\WorkStationConsoleApp\WorkStationConsoleApp\obj\Release\WorkStationConsoleApp.pdb

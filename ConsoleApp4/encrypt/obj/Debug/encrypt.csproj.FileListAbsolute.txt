@@ -1,0 +1,7 @@
+C:\Users\lcm\source\repos\ConsoleApp4\encrypt\bin\Debug\encrypt.exe.config
+C:\Users\lcm\source\repos\ConsoleApp4\encrypt\bin\Debug\encrypt.exe
+C:\Users\lcm\source\repos\ConsoleApp4\encrypt\bin\Debug\encrypt.pdb
+C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.csproj.CoreCompileInputs.cache
+C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.exe
+C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.pdb
+C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.csprojResolveAssemblyReference.cache

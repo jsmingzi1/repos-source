@@ -1,0 +1,7 @@
+c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\obj\Debug\ConsoleAppClient.csprojResolveAssemblyReference.cache
+c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\obj\Debug\ConsoleAppClient.csproj.CoreCompileInputs.cache
+c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\bin\Debug\ConsoleAppClient.exe.config
+c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\bin\Debug\ConsoleAppClient.exe
+c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\bin\Debug\ConsoleAppClient.pdb
+c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\obj\Debug\ConsoleAppClient.exe
+c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\obj\Debug\ConsoleAppClient.pdb

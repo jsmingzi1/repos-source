@@ -1,0 +1,7 @@
+c:\users\lcm\source\repos\ConsoleApp4\WcfServiceLibrary1\bin\Debug\WcfServiceLibrary1.dll.config
+c:\users\lcm\source\repos\ConsoleApp4\WcfServiceLibrary1\bin\Debug\WcfServiceLibrary1.dll
+c:\users\lcm\source\repos\ConsoleApp4\WcfServiceLibrary1\bin\Debug\WcfServiceLibrary1.pdb
+c:\users\lcm\source\repos\ConsoleApp4\WcfServiceLibrary1\obj\Debug\WcfServiceLibrary1.csproj.CoreCompileInputs.cache
+c:\users\lcm\source\repos\ConsoleApp4\WcfServiceLibrary1\obj\Debug\WcfServiceLibrary1.dll
+c:\users\lcm\source\repos\ConsoleApp4\WcfServiceLibrary1\obj\Debug\WcfServiceLibrary1.pdb
+c:\users\lcm\source\repos\ConsoleApp4\WcfServiceLibrary1\obj\Debug\WcfServiceLibrary1.csprojResolveAssemblyReference.cache
