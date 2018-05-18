@@ -1,0 +1,27 @@
+﻿<Window x:Class="WpfApp5.NewFileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp5"
+        mc:Ignorable="d"
+        Title="NewFileWindow" Height="240" Width="500" WindowStyle="None">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="130"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+            <Label Content="Please input new filename" Height="30" Margin="0,0" Name="m_filenamelabel"/>
+            <TextBox Text="" Height="30" Margin="0, 0" Name="m_filename"/>
+            <Label Content="Under below path" Height="30" Margin="0,0"/>
+            <TextBox Text="" Height="30" Margin="0, 0" IsReadOnly="True" Name="m_foldername"/>
+        </StackPanel>
+
+        <DockPanel Grid.Row="1">
+            <Button Content="OK" DockPanel.Dock="Left" Width="100" Height="20" Margin="80, 20" Click="Button_Click"/>
+            <Button Content="Cancel" DockPanel.Dock="Right" Width="100" Height="20" Click="Button_Click_1"/>
+
+        </DockPanel>
+    </Grid>
+</Window>

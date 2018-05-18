@@ -35,33 +35,48 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+
         private WorkflowDesigner wd;
+        // private Sequence
         private System.Windows.Controls.TextBox textBox;
         public MainWindow()
         {
             InitializeComponent();
 
-            // Register the metadata  
-            RegisterMetadata();
-
-            // Add the WFF Designer  
-            AddDesigner();
-
             this.AddToolBox();
+            NewFlow("");
+            //// Register the metadata  
+            //RegisterMetadata();
+
+            //// Add the WFF Designer  
+            //AddDesigner("");
+
+
+            //this.AddPropertyInspector();
+            //this.AddOutline();
+            //this.AddConsole();
+
+            //wd.Context.Services.Publish<IValidationErrorService>(new DebugValidationErrorService());
+
+        }
+
+        private void NewFlow(string filename)
+        {
+            RegisterMetadata();
+            AddDesigner(filename);
             this.AddPropertyInspector();
             this.AddOutline();
             this.AddConsole();
-           
             wd.Context.Services.Publish<IValidationErrorService>(new DebugValidationErrorService());
-            
         }
 
         private void AddOutline()
         {
             Grid.SetRow(this.wd.OutlineView, 1);
             Grid.SetColumn(this.wd.OutlineView, 2);
-           
+
             grid1.Children.Add(wd.OutlineView);
+
         }
 
         private void AddConsole()
@@ -71,18 +86,30 @@ namespace WpfApp1
             grid1.Children.Add(textBox);
             Console.SetOut(new ControlWriter(textBox));
         }
-        private void AddDesigner()
+        private void AddDesigner(string filename)
         {
             //Create an instance of WorkflowDesigner class.  
             this.wd = new WorkflowDesigner();
-            textBox = new System.Windows.Controls.TextBox();
 
+            textBox = new System.Windows.Controls.TextBox();
+            //ad.
             //Place the designer canvas in the middle column of the grid.  
             Grid.SetColumn(this.wd.View, 1);
             Grid.SetRowSpan(this.wd.View, 2);
 
+            //Adding annotations
+            wd.Context.Services.GetService<DesignerConfigurationService>().AnnotationEnabled = true;
+            //Targeting the .NET 4.5 Framework for the configuration service for the WF Designer control
+            wd.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName = new
+            System.Runtime.Versioning.FrameworkName(".NET Framework", new Version(4, 5));
+
             //Load a new Sequence as default.  
-            this.wd.Load(new Sequence());
+            if (string.IsNullOrEmpty(filename))
+
+                this.wd.Load(BuildBaseActivity());
+            else
+                this.wd.Load(filename);
+
 
             //Add the designer canvas to the grid.  
             grid1.Children.Add(this.wd.View);
@@ -119,10 +146,10 @@ namespace WpfApp1
             //    typeof(Sequence).Assembly.FullName, null, "FlowStep");
 
 
-            string[] list = { "Assign", "CancellationScope", "CompensableActivity", "Compensate", "CompensationExtension", "Confirm", "CreateBookmarkScope", "Delay", "DeleteBookmarkScope", "DoWhile", "DurableTimerExtension", "Flowchart", "FlowDecision",  "FlowStep", "InvokeAction", "If", "InvokeDelegate", "InvokeMethod", "NoPersistScope", "Parallel", "Persist", "Pick", "PickBranch", "Rethrow", "Sequence", "State", "StateMachine", "TerminateWorkflow", "Throw", "TransactionScope", "Transition", "While", "WorkflowTerminatedException", "WriteLine" };
-            foreach(string item in list)
+            string[] list = { "Assign", "CancellationScope", "CompensableActivity", "Compensate", "CompensationExtension", "Confirm", "CreateBookmarkScope", "Delay", "DeleteBookmarkScope", "DoWhile", "DurableTimerExtension", "Flowchart", "FlowDecision", "FlowStep", "InvokeAction", "If", "InvokeDelegate", "InvokeMethod", "NoPersistScope", "Parallel", "Persist", "Pick", "PickBranch", "Rethrow", "Sequence", "State", "StateMachine", "TerminateWorkflow", "Throw", "TransactionScope", "Transition", "While", "WorkflowTerminatedException", "WriteLine" };
+            foreach (string item in list)
             {
-                ToolboxItemWrapper tool = new ToolboxItemWrapper("System.Activities.Statements."+item,
+                ToolboxItemWrapper tool = new ToolboxItemWrapper("System.Activities.Statements." + item,
                 typeof(Sequence).Assembly.FullName, null, item);
                 category.Add(tool);
             }
@@ -169,7 +196,7 @@ namespace WpfApp1
                 // Save document
                 this.wd.Save(dlg.FileName);
             }
-            
+
         }
 
         //run
@@ -218,8 +245,33 @@ namespace WpfApp1
             Nullable<bool> result = dlg.ShowDialog();
             if (result == true)
             {
-                //this.wd.Load()
-                this.wd.Load(dlg.FileName);
+
+                NewFlow(dlg.FileName);
+                //this.wd.Load(dlg.FileName);
+                this.wd.Flush();
+            }
+        }
+
+        private ActivityBuilder BuildBaseActivity()
+        {
+            try
+            {
+                ActivityBuilder builder = new ActivityBuilder
+                {
+                    Name = "CustomWorkflow",
+                    Implementation = new Sequence()
+                    {
+//                        Activities =
+//{
+//new Assign<Int32>()
+//}
+                    }
+                };
+                return builder;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
@@ -257,4 +309,15 @@ namespace WpfApp1
         }
     }
 
+    public class CustomActivity:CodeActivity
+    {
+        [Category("Input")]
+        [RequiredArgument]
+        public InArgument<double> FirstNumber { get; set; }
+
+        protected override void Execute(CodeActivityContext context)
+        {
+
+        }
+    }
 }

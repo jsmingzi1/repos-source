@@ -9,6 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Microsoft.Windows.Controls;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -61,6 +62,8 @@ namespace WpfApp1 {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
         public static void Main() {
+            SplashScreen splashScreen = new SplashScreen("splashscreen1.png");
+            splashScreen.Show(true);
             WpfApp1.App app = new WpfApp1.App();
             app.InitializeComponent();
             app.Run();
