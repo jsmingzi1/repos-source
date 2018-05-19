@@ -592,8 +592,10 @@ namespace WpfApp5
             if (rootInstance != null)
             {
                 Activity documentRootElement = GetRootWorkflowElement(rootInstance);
-                SourceLocationProvider.CollectMapping(GetRootRuntimeWorkflowElement(fullname), documentRootElement, sourceLocationMapping,
+                SourceLocationProvider.CollectMapping(/*GetRootRuntimeWorkflowElement(fullname)*/documentRootElement, documentRootElement, sourceLocationMapping,
                     designer.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
+                Activity ac = GetRootRuntimeWorkflowElement(fullname);
+                string filename = designer.Context.Items.GetValue<WorkflowFileItem>().LoadedFile;
                 SourceLocationProvider.CollectMapping(documentRootElement, documentRootElement, designerSourceLocationMapping,
                     designer.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
 
