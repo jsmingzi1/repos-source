@@ -87,6 +87,8 @@ namespace WpfApp5
             // Label
             Label lbl = new Label();
             lbl.Content = filename;
+           // if (bFile)
+           //     lbl.MouseDoubleClick += new MouseButtonEventHandler(treView_MouseDoubleClick);
 
 
             // Add into stack
@@ -148,12 +150,31 @@ namespace WpfApp5
             return true;
         }
 
+        bool RefreshProject()
+        {
+            if (string.IsNullOrEmpty(m_projectfolder))
+            {
+                m_textbox_projectfolder.Text = m_projectfolder;
+
+                m_treeview_projectfolder.Items.Clear();
+                m_treeview_projectfolder.Items.Add(BuildTreeView(m_projectfolder));
+
+                m_treeview_projectfolder.MouseDoubleClick += new MouseButtonEventHandler(treView_MouseDoubleClick);
+
+                m_documentpane.Children.Clear();
+                m_DesignerList.Clear();
+                m_outlinepane.Content = null;
+                m_propertiespane.Content = null;
+            }
+            return true;
+        }
+
 
         private void treView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem tvi = GetSelectedItem((FrameworkElement)e.OriginalSource, m_treeview_projectfolder);
 
-            if (tvi.HasItems == false && tvi.Header.ToString().ToLower().EndsWith(".xaml"))
+            if (tvi.HasItems == false && tvi.ToolTip.ToString().ToLower().EndsWith(".xaml"))
             { 
                 //MessageBox.Show(tvi.ToolTip.ToString(), "double click prompt", 0);
                 LoadXaml(tvi.ToolTip.ToString());
@@ -992,6 +1013,40 @@ namespace WpfApp5
             if (instance != null)
             {
                 instance.Abort();
+            }
+        }
+
+        private void RibbonMenuItem_SaveAll(object sender, RoutedEventArgs e)
+        {
+            foreach (LayoutDocument doc in m_documentpane.Children)
+            {
+                m_DesignerList[doc].Flush();
+                m_DesignerList[doc].Save(doc.ToolTip.ToString());
+            }
+        }
+
+        private void RibbonMenuItem_SaveAs(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(m_projectfolder))
+            {
+                MessageBox.Show("you should at least have a project first, then can create new file");
+            }
+            else if (m_documentpane.ChildrenCount > 0)
+            {
+                NewFileWindow win = new NewFileWindow(m_projectfolder);
+                win.ShowDialog();
+                string filename = win.GetFileName("");
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    LayoutDocument doc = (LayoutDocument)m_documentpane.SelectedContent;
+                    WorkflowDesigner designer = m_DesignerList[doc];
+
+                    Directory.Move(doc.ToolTip.ToString(), m_projectfolder + "\\" + filename);
+                    RefreshProject();
+                    doc.ToolTip = filename;
+                    designer.Load(m_projectfolder + "\\" + filename);
+                    
+                }
             }
         }
     }

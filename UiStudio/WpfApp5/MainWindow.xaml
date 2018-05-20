@@ -32,8 +32,8 @@
                     <Custom:RibbonButton Label="Open" Click="RibbonButton_Open" LargeImageSource="Resources/Open.PNG" SmallImageSource="Resources/Open.PNG"/>
                     <Custom:RibbonButton Label="Run" Click="RibbonButton_Run" LargeImageSource="Resources/Run.PNG" SmallImageSource="Resources/Run.PNG"/>
                     <Custom:RibbonSplitButton Label="Save" Click="RibbonButton_Save" LargeImageSource="Resources/Save.PNG" SmallImageSource="Resources/Save.PNG">
-                        <Custom:RibbonMenuItem Header="Save As" ImageSource="Resources/SaveAs.PNG"/>
-                        <Custom:RibbonMenuItem Header="Save All" ImageSource="Resources/SaveAs.PNG"/>
+                        <Custom:RibbonMenuItem Header="Save As" ImageSource="Resources/SaveAs.PNG" Click="RibbonMenuItem_SaveAs"/>
+                        <Custom:RibbonMenuItem Header="Save All" ImageSource="Resources/SaveAs.PNG" Click="RibbonMenuItem_SaveAll"/>
                     </Custom:RibbonSplitButton>
                 </Custom:RibbonGroup>
                 <Custom:RibbonGroup Header="Selector">
@@ -49,7 +49,7 @@
                 </Custom:RibbonGroup>
                 <Custom:RibbonGroup>
                     <Custom:RibbonButton Label="Validate" LargeImageSource="Resources/Validate.PNG" SmallImageSource="Resources/Validate.PNG"/>
-                    <Custom:RibbonSplitButton Label="Breakpoints" LargeImageSource="Resources/Breakpoints.PNG" SmallImageSource="Resources/Breakpoints.PNG" IsDropDownOpen="True" LabelPosition="DropDown">
+                    <Custom:RibbonSplitButton Label="Breakpoints" LargeImageSource="Resources/Breakpoints.PNG" SmallImageSource="Resources/Breakpoints.PNG" IsDropDownOpen="False" LabelPosition="DropDown">
                         <Custom:RibbonMenuItem Header="Toggle Breakpoint" ImageSource="Resources/Toggle.PNG" Click="RibbonMenuItem_ClickToggle"/>
                         <Custom:RibbonMenuItem Header="Remove Breakpoint" ImageSource="Resources/Remove.PNG" Click="RibbonMenuItem_ClickRemove"/>
                     </Custom:RibbonSplitButton>
@@ -83,10 +83,10 @@
                 <xcad:LayoutRoot.LeftSide>
                     <xcad:LayoutAnchorSide>
                         <xcad:LayoutAnchorGroup>
-                            <xcad:LayoutAnchorable FloatingWidth="200" AutoHideWidth="200" Title="Library">
+                            <xcad:LayoutAnchorable FloatingWidth="200" AutoHideWidth="200" Title="Library" IconSource="Resources/FolderLeft.PNG">
                                 <Button Content="bt1"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable FloatingWidth="200" AutoHideWidth="200" Title="Project">
+                            <xcad:LayoutAnchorable FloatingWidth="200" AutoHideWidth="200" Title="Project" IconSource="Resources/FolderLeft.PNG">
                                 <DockPanel>
                                     <Grid>
                                         <Grid.RowDefinitions>
