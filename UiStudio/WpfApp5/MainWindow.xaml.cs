@@ -5,9 +5,11 @@ using System.Activities.Core.Presentation;
 using System.Activities.Debugger;
 using System.Activities.Presentation;
 using System.Activities.Presentation.Debug;
+using System.Activities.Presentation.Model;
 using System.Activities.Presentation.Services;
 using System.Activities.Presentation.Toolbox;
 using System.Activities.Presentation.Validation;
+using System.Activities.Presentation.View;
 using System.Activities.Statements;
 using System.Activities.Tracking;
 using System.Activities.XamlIntegration;
@@ -39,13 +41,23 @@ namespace WpfApp5
     {
         private string m_projectfolder = "";
         Dictionary<LayoutDocument, WorkflowDesigner> m_DesignerList;
+        Dictionary<WorkflowDesigner, List<SourceLocation>> m_DesignerBreakPoints;
+        //List<SourceLocation> m_LocationList;
+        WorkflowApplication instance = null;
+
         Dictionary<int, SourceLocation> textLineToSourceLocationMap;
+
+        WorkflowDesigner m_test_designer = null;
+
+        AutoResetEvent resumeRuntimeFromHost = null;
         int i = 0;
         public MainWindow()
         {
             InitializeComponent();
 
             m_DesignerList = new Dictionary<LayoutDocument, WorkflowDesigner>();
+            //m_LocationList = new List<SourceLocation>();
+            m_DesignerBreakPoints = new Dictionary<WorkflowDesigner, List<SourceLocation>>();
             m_documentpane.Children.Clear();
             Console.SetOut(new ControlWriter(m_console_textbox));
             textLineToSourceLocationMap = new Dictionary<int, SourceLocation>();
@@ -54,6 +66,63 @@ namespace WpfApp5
             LoadProject("d:\\ws\\");
         }
 
+        private TreeViewItem GetTreeView(string filename, string tooltip, bool bFile)
+        {
+            TreeViewItem item = new TreeViewItem();
+            item.IsExpanded = false;
+
+            // create stack panel
+            StackPanel stack = new StackPanel();
+            stack.Orientation = Orientation.Horizontal;
+
+            // create Image
+            Image image = new Image();
+            if (bFile)
+                image.Source = new BitmapImage(new Uri("pack://application:,,/Resources/File.PNG"));
+            else
+                image.Source = new BitmapImage(new Uri("pack://application:,,/Resources/Folder.PNG"));
+
+            image.Width = 16;
+            image.Height = 16;
+            // Label
+            Label lbl = new Label();
+            lbl.Content = filename;
+
+
+            // Add into stack
+            stack.Children.Add(image);
+            stack.Children.Add(lbl);
+
+            // assign stack to header
+            //stack.ToolTip = tooltip;
+            item.Header = stack;
+            item.ToolTip = tooltip;
+           // item.
+            return item;
+        }
+
+        TreeViewItem BuildTreeView(string foldername)
+        {
+            TreeViewItem top = GetTreeView(new DirectoryInfo(foldername).Name, foldername, false);
+            string[] files = Directory.GetFiles(foldername);
+            string[] folders = Directory.GetDirectories(foldername);
+            string[] filesall = files.Concat(folders).ToArray();
+            Array.Sort(filesall, StringComparer.InvariantCulture);
+
+            foreach (var file in filesall)
+            {
+                TreeViewItem item = null;
+                if (Directory.Exists(file))
+                    item = BuildTreeView(file);
+                else if (file.ToLower().EndsWith(".xaml"))
+                    item = GetTreeView(System.IO.Path.GetFileName(file), file, true);
+                else
+                    continue;
+
+                top.Items.Add(item);
+            }
+            return top;
+        }
         //Load Default Project
         bool LoadProject(string projectfolder)
         {
@@ -65,21 +134,10 @@ namespace WpfApp5
                 m_projectfolder = projectfolder;
 
             m_textbox_projectfolder.Text = m_projectfolder;
-            string [] files = Directory.GetFiles(m_projectfolder);
 
             m_treeview_projectfolder.Items.Clear();
-            TreeViewItem itemTop = new TreeViewItem();
-            itemTop.Header = new DirectoryInfo(m_projectfolder).Name;
-            
-            m_treeview_projectfolder.Items.Add(itemTop);
+            m_treeview_projectfolder.Items.Add(BuildTreeView(m_projectfolder));
 
-            foreach(string file in files)
-            {
-                TreeViewItem item = new TreeViewItem();
-                item.Header = System.IO.Path.GetFileName(file);
-                item.ToolTip = file;
-                itemTop.Items.Add(item);
-            }
             m_treeview_projectfolder.MouseDoubleClick += new MouseButtonEventHandler(treView_MouseDoubleClick);
 
             m_documentpane.Children.Clear();
@@ -150,10 +208,10 @@ namespace WpfApp5
             dm.Register();
 
             WorkflowDesigner designer = new WorkflowDesigner();
-            designer.Context.Services.GetService<DesignerConfigurationService>().AnnotationEnabled = true;
-            //Targeting the .NET 4.5 Framework for the configuration service for the WF Designer control
-            designer.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName = new
-            System.Runtime.Versioning.FrameworkName(".NET Framework", new Version(4, 5));
+            //designer.Context.Services.GetService<DesignerConfigurationService>().AnnotationEnabled = true;
+            ////Targeting the .NET 4.5 Framework for the configuration service for the WF Designer control
+            //designer.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName = new
+            //System.Runtime.Versioning.FrameworkName(".NET Framework", new Version(4, 5));
 
             doc.Content = designer.View;
             if (activity is null)
@@ -165,11 +223,11 @@ namespace WpfApp5
             }
             doc.IsSelectedChanged += Doc_IsSelectedChanged;
             doc.Closed += Doc_Closed;
-            designer.Context.Services.Publish<IValidationErrorService>(new DebugValidationErrorService());
+            //designer.Context.Services.Publish<IValidationErrorService>(new DebugValidationErrorService());
             designer.TextChanged += Designer_TextChanged;
             m_DesignerList.Add(doc, designer);
             //Adding annotations
-            
+            m_DesignerBreakPoints.Add(designer, new List<SourceLocation>());
             return true;
         }
 
@@ -187,10 +245,13 @@ namespace WpfApp5
             {
                 if (i.ToolTip.ToString() == doc.ToolTip.ToString())
                 {
+                    m_DesignerBreakPoints.Remove(m_DesignerList[i]);
                     m_DesignerList.Remove(i);
+                    
                     break;
                 }
             }
+            
         }
 
         private void Doc_IsSelectedChanged(object sender, EventArgs e)
@@ -521,13 +582,22 @@ namespace WpfApp5
         
         private void RibbonButton_Debug(object sender, RoutedEventArgs e)
         {
+            //MessageBox.Show("Debug button clicked");
             if (m_documentpane.ChildrenCount > 0)
             {
                 string fullname = m_documentpane.SelectedContent.ToolTip.ToString();
                 WorkflowDesigner designer = m_DesignerList[(LayoutDocument)m_documentpane.SelectedContent];
+                this.m_test_designer = designer;
+                
                 DebugWorkflow(designer, fullname);
             }
         }
+        private void RibbonButton_Continue(object sender, RoutedEventArgs e)
+        {
+            if (resumeRuntimeFromHost!=null)
+            resumeRuntimeFromHost.Set();
+        }
+
 
         //get root node from *.xaml
         Activity GetRootRuntimeWorkflowElement(string fullname)
@@ -612,8 +682,11 @@ namespace WpfApp5
             return sourceLocationMapping;
         }
 
-        void ShowDebug(SourceLocation srcLoc, WorkflowDesigner designer)
+        //if access breakpoint from debug view directly, the View UI will stop update;
+        //so when set breakpoint, save to a loal variable, when use it, directly use variable to verify, don't directly access Debug view.
+        void ShowDebug(SourceLocation srcLoc, WorkflowDesigner designer, string state)
         {
+            //designer.DebugManagerView.CurrentLocation = srcLoc;
             this.Dispatcher.Invoke(DispatcherPriority.Render
                 , (Action)(() =>
                 {
@@ -621,6 +694,29 @@ namespace WpfApp5
 
                 }));
 
+            //MessageBox.Show("Step0");
+
+            if (m_DesignerBreakPoints[designer].Contains(srcLoc) && state=="Executing")
+            {
+                resumeRuntimeFromHost.WaitOne();
+            }
+            
+            //Check if this is where any BP is set
+            //bool isBreakpointHit = false;
+            //ICollection<SourceLocation> collect = designer.DebugManagerView.GetBreakpointLocations().Keys;
+            //foreach (SourceLocation src in designer.DebugManagerView.GetBreakpointLocations().Keys)
+            //{
+            //    if (src.StartLine == srcLoc.StartLine && src.EndLine == srcLoc.EndLine)
+            //    {
+            //        isBreakpointHit = true;
+            //    }
+            //}
+
+            //if (isBreakpointHit == true)
+            //{
+            //    resumeRuntimeFromHost.WaitOne();
+            //}
+            //MessageBox.Show("Step1");
         }
 
         private Dictionary<string, Activity> BuildActivityIdToWfElementMap(Dictionary<object, SourceLocation> wfElementToSourceLocationMap)
@@ -681,7 +777,9 @@ namespace WpfApp5
         //Run the Workflow with the tracking participant
         public void DebugWorkflow(WorkflowDesigner designer, string fullname)
         {
-            WorkflowInvoker instance = new WorkflowInvoker(GetRuntimeExecutionRoot(fullname));
+            resumeRuntimeFromHost = new AutoResetEvent(false);
+            //WorkflowInvoker instance = new WorkflowInvoker(GetRuntimeExecutionRoot(fullname));
+            instance = new WorkflowApplication(GetRuntimeExecutionRoot(fullname));
 
             //Mapping between the Object and Line No.
             Dictionary<object, SourceLocation> wfElementToSourceLocationMap = UpdateSourceLocationMappingInDebuggerService(designer, fullname);
@@ -730,6 +828,8 @@ namespace WpfApp5
 
             simTracker.ActivityIdToWorkflowElementMap = activityIdToWfElementMap;
 
+            
+
             //As the tracking events are received
             simTracker.TrackingRecordReceived += (trackingParticpant, trackingEventArgs) =>
             {
@@ -742,13 +842,14 @@ namespace WpfApp5
                         )
                     );
 
-                    ShowDebug(wfElementToSourceLocationMap[trackingEventArgs.Activity], designer);
+                   // designer.DebugManagerView.CurrentLocation = wfElementToSourceLocationMap[trackingEventArgs.Activity];
+                    ShowDebug(wfElementToSourceLocationMap[trackingEventArgs.Activity], designer, ((ActivityStateRecord)trackingEventArgs.Record).State);
 
                     this.Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
                     {
                         //Textbox Updates
                         m_console_textbox.AppendText(trackingEventArgs.Activity.DisplayName + " " + ((ActivityStateRecord)trackingEventArgs.Record).State + "\n");
-                        m_console_textbox.AppendText("******************\n");
+                        //m_console_textbox.AppendText("******************\n");
                         textLineToSourceLocationMap.Add(i, wfElementToSourceLocationMap[trackingEventArgs.Activity]);
                         i = i + 2;
 
@@ -764,8 +865,9 @@ namespace WpfApp5
             {
                 //Invoking the Workflow Instance with Input Arguments
                 //instance.Invoke(new Dictionary<string, object> { { "decisionVar", true } }, new TimeSpan(1, 0, 0));
-                instance.Invoke(new Dictionary<string, object> {  }, new TimeSpan(1, 0, 0));
-
+                //instance.Invoke(new Dictionary<string, object> {  }, new TimeSpan(1, 0, 0));
+                instance.Run();
+                //instance = null;
                 //This is to remove the final debug adornment
                 this.Dispatcher.Invoke(DispatcherPriority.Render
                     , (Action)(() =>
@@ -775,6 +877,122 @@ namespace WpfApp5
 
             }));
 
+        }
+
+
+        //set break point
+        private void RibbonMenuItem_ClickToggle(object sender, RoutedEventArgs e)
+        {
+            if (m_documentpane.ChildrenCount > 0)
+            {
+                WorkflowDesigner designer = m_DesignerList[(LayoutDocument)m_documentpane.SelectedContent];
+                ModelItem mi = designer.Context.Items.GetValue<Selection>().PrimarySelection;
+                Activity activity = mi.GetCurrentValue() as Activity;
+                if (activity != null)
+                {
+                    //MessageBox.Show(activity.DisplayName);
+                    Dictionary<object, SourceLocation> designerSourceLocationMapping = UpdateSourceLocationMappingInDebuggerService(designer, m_documentpane.SelectedContent.ToolTip.ToString());
+                    SourceLocation srcLoc = null;// = designerSourceLocationMapping[activity];
+                    foreach(Activity tp in designerSourceLocationMapping.Keys)
+                    {
+                        if (tp.Id == activity.Id)
+                        {
+                            srcLoc = designerSourceLocationMapping[tp];
+                            break;
+                        }
+                    }
+                    //MessageBox.Show(designer.Context.Services.GetService<IDesignerDebugView>().GetBreakpointLocations().Keys.Count.ToString());
+
+                    if (m_DesignerBreakPoints[designer].Contains(srcLoc))
+                    {
+                        Console.WriteLine("breakpoint exist, no need set again");
+                    }
+                    else
+                    {
+
+                        m_DesignerBreakPoints[designer].Add(srcLoc);
+                        designer.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.Bounded | BreakpointTypes.Enabled);
+                    }
+                    //check if break point exist
+                    //bool bExist = false;
+                    //foreach(SourceLocation location in designer.Context.Services.GetService<IDesignerDebugView>().GetBreakpointLocations().Keys)
+                    //{
+                    //    if (location.StartLine == srcLoc.StartLine && location.EndLine == srcLoc.EndLine
+                    //        && location.StartColumn == srcLoc.StartColumn && location.EndColumn == srcLoc.EndColumn)
+                    //    {
+                    //        bExist = true;
+                    //        //MessageBox.Show("break point already exist");
+                    //        break;
+                    //    }
+                    //}
+                    
+                    //if (!bExist)
+                    //{
+                    //    //designer.DebugManagerView.UpdateBreakpoint(srcLoc, BreakpointTypes.Bounded | BreakpointTypes.Enabled);
+                    //    designer.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.Bounded | BreakpointTypes.Enabled);
+                    //}
+                }
+            }
+        }
+
+        private void RibbonMenuItem_ClickRemove(object sender, RoutedEventArgs e)
+        {
+            if (m_documentpane.ChildrenCount > 0)
+            {
+                WorkflowDesigner designer = m_DesignerList[(LayoutDocument)m_documentpane.SelectedContent];
+                ModelItem mi = designer.Context.Items.GetValue<Selection>().PrimarySelection;
+                Activity activity = mi.GetCurrentValue() as Activity;
+                if (activity != null)
+                {
+                    //MessageBox.Show(activity.DisplayName);
+                    Dictionary<object, SourceLocation> designerSourceLocationMapping = UpdateSourceLocationMappingInDebuggerService(designer, m_documentpane.SelectedContent.ToolTip.ToString());
+                    SourceLocation srcLoc = null;//designerSourceLocationMapping[activity];
+                    foreach (Activity tp in designerSourceLocationMapping.Keys)
+                    {
+                        if (tp.Id == activity.Id)
+                        {
+                            srcLoc = designerSourceLocationMapping[tp];
+                            break;
+                        }
+                    }
+
+                    if (m_DesignerBreakPoints[designer].Contains(srcLoc))
+                    {
+                        designer.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.None);
+                        m_DesignerBreakPoints[designer].Remove(srcLoc);
+                    }
+                    //check if break point exist
+                    //bool bExist = false;
+                    //foreach (SourceLocation location in designer.Context.Services.GetService<IDesignerDebugView>().GetBreakpointLocations().Keys)
+                    //{
+                    //    if (location.StartLine == srcLoc.StartLine && location.EndLine == srcLoc.EndLine
+                    //        && location.StartColumn == srcLoc.StartColumn && location.EndColumn == srcLoc.EndColumn)
+                    //    {
+                    //        bExist = true;
+                    //        //MessageBox.Show("break point already exist");
+                    //        break;
+                    //    }
+                    //}
+
+                    //if (bExist)
+                    //{
+                    //    designer.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.None);
+                    //}
+                }
+            }
+        }
+
+        private void RibbonButton_Stop(object sender, RoutedEventArgs e)
+        {
+            if (m_documentpane.ChildrenCount > 0)
+            {
+                WorkflowDesigner designer = m_DesignerList[(LayoutDocument)m_documentpane.SelectedContent];
+                designer.DebugManagerView.CurrentLocation = null;
+            }
+            if (instance != null)
+            {
+                instance.Abort();
+            }
         }
     }
 

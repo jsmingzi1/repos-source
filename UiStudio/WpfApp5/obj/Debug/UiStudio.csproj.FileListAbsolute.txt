@@ -63,7 +63,6 @@ D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\ro\Xceed.Wpf.AvalonDo
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
-D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csprojResolveAssemblyReference.cache
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\MainWindow.g.cs
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\NewFileWindow.g.cs
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\App.g.cs
@@ -78,3 +77,6 @@ D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.CoreC
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.CopyComplete
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5.exe
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5.pdb
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csprojResolveAssemblyReference.cache
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Window1.g.cs
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Window1.baml

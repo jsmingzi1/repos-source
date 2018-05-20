@@ -43,10 +43,17 @@
             <Custom:RibbonTab Header="EXECUTE">
                 <Custom:RibbonGroup Header="Launch">
                     <Custom:RibbonButton Label="Run" LargeImageSource="Resources/Run.PNG" SmallImageSource="Resources/Run.PNG" Click="RibbonButton_Run"/>
-                    <Custom:RibbonButton Label="Stop" LargeImageSource="Resources/Stop.PNG" SmallImageSource="Resources/Stop.PNG"/>
+                    <Custom:RibbonButton Label="Stop" LargeImageSource="Resources/Stop.PNG" SmallImageSource="Resources/Stop.PNG" Click="RibbonButton_Stop"/>
                     <Custom:RibbonButton Label="Debug" LargeImageSource="Resources/Debug.PNG" SmallImageSource="Resources/Debug.PNG" Click="RibbonButton_Debug"/>
+                    <Custom:RibbonButton Label="Continue" LargeImageSource="Resources/Debug.PNG" SmallImageSource="Resources/Debug.PNG" Click="RibbonButton_Continue"/>
                 </Custom:RibbonGroup>
-                
+                <Custom:RibbonGroup>
+                    <Custom:RibbonButton Label="Validate" LargeImageSource="Resources/Validate.PNG" SmallImageSource="Resources/Validate.PNG"/>
+                    <Custom:RibbonSplitButton Label="Breakpoints" LargeImageSource="Resources/Breakpoints.PNG" SmallImageSource="Resources/Breakpoints.PNG" IsDropDownOpen="True" LabelPosition="DropDown">
+                        <Custom:RibbonMenuItem Header="Toggle Breakpoint" ImageSource="Resources/Toggle.PNG" Click="RibbonMenuItem_ClickToggle"/>
+                        <Custom:RibbonMenuItem Header="Remove Breakpoint" ImageSource="Resources/Remove.PNG" Click="RibbonMenuItem_ClickRemove"/>
+                    </Custom:RibbonSplitButton>
+                </Custom:RibbonGroup>
             </Custom:RibbonTab>
             <Custom:RibbonTab Header="SETUP"/>
         </Custom:Ribbon>
