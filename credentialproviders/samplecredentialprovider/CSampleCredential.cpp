@@ -357,7 +357,7 @@ HRESULT CSampleCredential::CommandLinkClicked(__in DWORD dwFieldID)
 
 
 //use this method to decode the doamin name or machine name from username
-BOOL GetDomainName(LPWSTR lpbuffer, LPDWORD dwLen, LPCWSTR lpUsername)
+BOOL GetDomainName(LPWSTR lpbuffer, LPDWORD dwLen, LPCWSTR lpUsername, LPWSTR lpNewUsername)
 {
 	if (wcsstr(lpUsername, L"\\"))
 	{
@@ -373,9 +373,35 @@ BOOL GetDomainName(LPWSTR lpbuffer, LPDWORD dwLen, LPCWSTR lpUsername)
 				lpbuffer[i] = lpUsername[i];
 			}
 		}
+
+		for (int j = 0; j < wcslen(lpUsername); j++)
+		{
+			if (j > *dwLen)
+			{
+				lpNewUsername[j - *dwLen - 1] = lpUsername[j];
+			}
+		}
 		return TRUE;
 	}
+	else
+	{
+		for (int j = 0; j < wcslen(lpUsername); j++)
+		{
+			lpNewUsername[j] = lpUsername[j];
+		}
+	}
 	return FALSE;
+}
+
+void LogW(wchar_t *pInfo)
+{
+	FILE* fLog;
+	fLog = _wfopen(L"c:/log.txt", L"w");
+	if (fLog != NULL)
+	{
+		fwrite(pInfo, sizeof(WCHAR), wcslen(pInfo), fLog);
+		fclose(fLog);
+	}
 }
 
 // Collect the username and password into a serialized credential for the correct usage scenario 
@@ -396,8 +422,11 @@ HRESULT CSampleCredential::GetSerialization(
     WCHAR wsz[MAX_COMPUTERNAME_LENGTH+1];
     DWORD cch = ARRAYSIZE(wsz);
 	DWORD cch1 = ARRAYSIZE(wsz);
-    if (GetDomainName(wsz, &cch, _rgFieldStrings[SFI_USERNAME]) || GetComputerNameW(wsz, &cch1))
+	WCHAR wNewUsername[255] = { 0 };
+    if (GetDomainName(wsz, &cch, _rgFieldStrings[SFI_USERNAME], wNewUsername) || GetComputerNameW(wsz, &cch1))
     {
+		//LogW(wsz);
+		//LogW(_rgFieldStrings[SFI_USERNAME]);
         PWSTR pwzProtectedPassword;
 
         hr = ProtectIfNecessaryAndCopyPassword(_rgFieldStrings[SFI_PASSWORD], _cpus, &pwzProtectedPassword);
@@ -407,7 +436,7 @@ HRESULT CSampleCredential::GetSerialization(
             KERB_INTERACTIVE_UNLOCK_LOGON kiul;
 
             // Initialize kiul with weak references to our credential.
-            hr = KerbInteractiveUnlockLogonInit(wsz, _rgFieldStrings[SFI_USERNAME], pwzProtectedPassword, _cpus, &kiul);
+            hr = KerbInteractiveUnlockLogonInit(wsz, wNewUsername/*_rgFieldStrings[SFI_USERNAME]*/, pwzProtectedPassword, _cpus, &kiul);
 
             if (SUCCEEDED(hr))
             {
