@@ -355,6 +355,29 @@ HRESULT CSampleCredential::CommandLinkClicked(__in DWORD dwFieldID)
 }
 //------ end of methods for controls we don't have in our tile ----//
 
+
+//use this method to decode the doamin name or machine name from username
+BOOL GetDomainName(LPWSTR lpbuffer, LPDWORD dwLen, LPCWSTR lpUsername)
+{
+	if (wcsstr(lpUsername, L"\\"))
+	{
+		for (int i = 0; i < *dwLen && i < wcslen(lpUsername); i++)
+		{
+			if (lpUsername[i] == L'\\')
+			{
+				*dwLen = i;
+				break;
+			}
+			else
+			{
+				lpbuffer[i] = lpUsername[i];
+			}
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
 // Collect the username and password into a serialized credential for the correct usage scenario 
 // (logon/unlock is what's demonstrated in this sample).  LogonUI then passes these credentials 
 // back to the system to log on.
@@ -372,7 +395,8 @@ HRESULT CSampleCredential::GetSerialization(
 
     WCHAR wsz[MAX_COMPUTERNAME_LENGTH+1];
     DWORD cch = ARRAYSIZE(wsz);
-    if (GetComputerNameW(wsz, &cch))
+	DWORD cch1 = ARRAYSIZE(wsz);
+    if (GetDomainName(wsz, &cch, _rgFieldStrings[SFI_USERNAME]) || GetComputerNameW(wsz, &cch1))
     {
         PWSTR pwzProtectedPassword;
 
