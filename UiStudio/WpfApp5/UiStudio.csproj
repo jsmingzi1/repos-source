@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CodeActivityDemo.cs" />
     <Compile Include="DesignerPage.cs" />
     <Compile Include="VisualWorkflowTracking.cs" />
     <Compile Include="Window1.xaml.cs">

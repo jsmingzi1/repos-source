@@ -55,7 +55,11 @@
                     </Custom:RibbonSplitButton>
                 </Custom:RibbonGroup>
             </Custom:RibbonTab>
-            <Custom:RibbonTab Header="SETUP"/>
+            <Custom:RibbonTab Header="SETUP">
+                <Custom:RibbonGroup>
+                    <Custom:RibbonButton Label="Add Activity" Click="RibbonButtonAddActivity_Click"/>
+                </Custom:RibbonGroup>
+            </Custom:RibbonTab>
         </Custom:Ribbon>
         <xcad:DockingManager Grid.Row="1">
             <xcad:LayoutRoot>

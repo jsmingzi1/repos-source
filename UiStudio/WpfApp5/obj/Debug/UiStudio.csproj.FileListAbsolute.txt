@@ -79,3 +79,4 @@ D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5.exe
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5.pdb
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Window1.g.cs
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Window1.baml
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csprojResolveAssemblyReference.cache

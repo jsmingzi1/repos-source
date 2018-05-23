@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -330,6 +331,21 @@ namespace WpfApp5
                 ToolboxItemWrapper tool = new ToolboxItemWrapper("System.Activities.Statements." + item,
                 typeof(Sequence).Assembly.FullName, null, item);
                 category.Add(tool);
+            }
+
+            //here must use relative path, instead of full path, or the load from will fail and file not found error raised
+            Assembly assembly = Assembly.LoadFrom(@".\lib\ActivityLibrary1.dll");
+            
+            foreach( Type i  in assembly.GetTypes())
+            {
+                
+                //string abc = Directory.GetCurrentDirectory();
+                //current work path is debug path, not project folder, a little different with c++ project
+
+                ToolboxItemWrapper tool2 = new ToolboxItemWrapper(i.ToString(),
+                assembly.FullName, null, i.Name);
+                category.Add(tool2);
+
             }
 
 
@@ -1048,6 +1064,11 @@ namespace WpfApp5
                     
                 }
             }
+        }
+
+        private void RibbonButtonAddActivity_Click(object sender, RoutedEventArgs e)
+        {
+            Assembly assembly = Assembly.LoadFile(@"d:\1.dll");
         }
     }
 

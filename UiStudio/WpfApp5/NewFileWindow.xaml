@@ -5,23 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp5"
         mc:Ignorable="d"
-        Title="NewFileWindow" Height="240" Width="500" WindowStyle="None">
+        Title="NewFileWindow" Height="140" Width="400" WindowStyle="None" Margin="0"
+        WindowStartupLocation="CenterScreen" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="130"/>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Vertical">
-            <Label Content="Please input new filename" Height="30" Margin="0,0" Name="m_filenamelabel"/>
-            <TextBox Text="" Height="30" Margin="0, 0" Name="m_filename"/>
-            <Label Content="Under below path" Height="30" Margin="0,0"/>
-            <TextBox Text="" Height="30" Margin="0, 0" IsReadOnly="True" Name="m_foldername"/>
+            <Label Content="Please input new filename" Margin="0,0" Name="m_filenamelabel" FontWeight="Bold" />
+
+            <TextBox Text=""  Margin="0, 0" Name="m_filename" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+            <Label Content="Under below path"  Margin="0,0" FontWeight="Bold"/>
+            <TextBox Text=""  Margin="0, 0" IsReadOnly="True" Name="m_foldername" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
         </StackPanel>
 
         <DockPanel Grid.Row="1">
-            <Button Content="OK" DockPanel.Dock="Left" Width="100" Height="20" Margin="80, 20" Click="Button_Click"/>
-            <Button Content="Cancel" DockPanel.Dock="Right" Width="100" Height="20" Click="Button_Click_1"/>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" Content="OK"  Click="Button_Click" FontWeight="Bold" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                    <Button Grid.Column="3" Content="Cancel" Click="Button_Click_1" FontWeight="Bold" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                </Grid>
 
+            </StackPanel>
         </DockPanel>
     </Grid>
 </Window>
