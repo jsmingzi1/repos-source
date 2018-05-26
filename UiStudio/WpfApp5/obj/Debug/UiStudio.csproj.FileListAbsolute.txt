@@ -79,4 +79,13 @@ D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5.exe
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5.pdb
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Window1.g.cs
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Window1.baml
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Activity1.g.xaml
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5_Activity1_BeforeInitializeComponentHelper.txt
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\_WpfApp5.g.cs
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\Activity1.g.cs
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5_Activity1_BeforeInitializeComponentHelper.cs
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.XamlGeneratedCodeFileListAbsolute.txt
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.XamlGeneratedXamlFileListAbsolute.txt
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5.dll
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\AC2C1ABA-CCF6-44D4-8127-588FD4D0A860-DeferredValidationErrors.xml
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csprojResolveAssemblyReference.cache

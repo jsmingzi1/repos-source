@@ -5,6 +5,7 @@ using System.Activities.Core.Presentation;
 using System.Activities.Debugger;
 using System.Activities.Presentation;
 using System.Activities.Presentation.Debug;
+using System.Activities.Presentation.Metadata;
 using System.Activities.Presentation.Model;
 using System.Activities.Presentation.Services;
 using System.Activities.Presentation.Toolbox;
@@ -14,6 +15,7 @@ using System.Activities.Statements;
 using System.Activities.Tracking;
 using System.Activities.XamlIntegration;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -38,7 +40,7 @@ namespace WpfApp5
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IRegisterMetadata
     {
         private string m_projectfolder = "";
         Dictionary<LayoutDocument, WorkflowDesigner> m_DesignerList;
@@ -55,7 +57,9 @@ namespace WpfApp5
         public MainWindow()
         {
             InitializeComponent();
+            //Register();
 
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(MyResolveEventHandler);
             m_DesignerList = new Dictionary<LayoutDocument, WorkflowDesigner>();
             //m_LocationList = new List<SourceLocation>();
             m_DesignerBreakPoints = new Dictionary<WorkflowDesigner, List<SourceLocation>>();
@@ -67,7 +71,25 @@ namespace WpfApp5
             LoadProject("d:\\ws\\");
         }
 
-        private TreeViewItem GetTreeView(string filename, string tooltip, bool bFile)
+        public void Register()
+           {
+            MessageBox.Show("Register now");
+            Console.WriteLine("Register !!!");
+            //var builder = new AttributeTableBuilder();
+            //MyActivityDesigner.RegisterMetadata(builder);
+
+            // TODO: Other activities can be added here
+            //MetadataStore.AddAttributeTable(builder.CreateTable());
+
+
+            //AttributeTableBuilder builder = new AttributeTableBuilder();
+            //   builder.AddCustomAttributes(
+            //       typeof(ReadCsvFile), 
+            //       new DesignerAttribute(typeof(ReadCsvFileDesigner)));
+            //   MetadataStore.AddAttributeTable(builder.CreateTable());
+           }
+
+    private TreeViewItem GetTreeView(string filename, string tooltip, bool bFile)
         {
             TreeViewItem item = new TreeViewItem();
             item.IsExpanded = false;
@@ -332,26 +354,89 @@ namespace WpfApp5
                 typeof(Sequence).Assembly.FullName, null, item);
                 category.Add(tool);
             }
+            category.Add(new ToolboxItemWrapper(typeof(TryCatch)));
+            //category.Add(new ToolboxItemWrapper(typeof(ReadCsvFile)));
 
-            //here must use relative path, instead of full path, or the load from will fail and file not found error raised
-            Assembly assembly = Assembly.LoadFrom(@".\lib\ActivityLibrary1.dll");
-            
-            foreach( Type i  in assembly.GetTypes())
-            {
-                
-                //string abc = Directory.GetCurrentDirectory();
-                //current work path is debug path, not project folder, a little different with c++ project
 
-                ToolboxItemWrapper tool2 = new ToolboxItemWrapper(i.ToString(),
-                assembly.FullName, null, i.Name);
-                category.Add(tool2);
-
-            }
-
+            ToolboxCategory externalCategory = AddExternalActivities("UiPath.Excel");
 
             // Add the category to the ToolBox control.  
             ctrl.Categories.Add(category);
+            ctrl.Categories.Add(externalCategory);
             return ctrl;
+        }
+
+        private static Assembly MyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            Assembly[] AssembliesLoaded = AppDomain.CurrentDomain.GetAssemblies();
+
+            foreach (Assembly MyAssembly in AssembliesLoaded)
+            {
+                if (MyAssembly.FullName == args.Name)
+                {
+                    return MyAssembly;
+                }
+            }
+
+            return null;
+        }
+
+        private ToolboxCategory AddExternalActivities(string name)
+        {
+            ToolboxCategory category = new ToolboxCategory(name);
+
+            Assembly.LoadFrom(@".\lib\UiPath.Excel.dll");
+            Assembly assemblyDesigner = Assembly.LoadFrom(@".\lib\UiPath.Excel.Activities.Design.dll");
+            Assembly assembly = Assembly.LoadFrom(@".\lib\UiPath.Excel.Activities.dll");
+           // bool bDesignerExist = File.Exists(@".\lib\UiPath.Excel.Activities.Design.dll");
+
+            foreach(Type g in assemblyDesigner.GetTypes())
+            {
+                if (g.IsAbstract == false && g.GetInterfaces().Contains(typeof(IRegisterMetadata)))
+                {
+                    //Console.WriteLine("found uipath metadata");
+                    IRegisterMetadata meta = Activator.CreateInstance(g) as IRegisterMetadata;
+                    meta.Register();
+                }
+            }
+            int c = 0;
+            foreach (Type i in assembly.GetTypes())
+            {
+
+
+                if (i.IsAbstract == false && i.IsSubclassOf(typeof(Activity)))
+                {
+                    Console.Write(i.ToString());
+                    ToolboxItemWrapper tool2 = new ToolboxItemWrapper(i.ToString(), assembly.FullName, null, i.Name);
+                    category.Add(tool2);
+                    //there already has register class in designer dll, don't manually map it
+                    //foreach (Type j in assemblyDesigner.GetTypes())
+                    //{
+                    //    if (i.Name.Contains("GetTableRange") && j.Name.Contains("GetTableRange"))
+                    //    {
+                    //        int cd = 0;
+                    //    }
+                    //    //ActivityDesigner designer = Activator.CreateInstance(j) as ActivityDesigner;
+                    //    if (!j.IsAbstract && j.IsSubclassOf(typeof(ActivityDesigner)) && j.Name.StartsWith(i.Name))
+                    //    {
+
+                    //        AttributeTableBuilder builder = new AttributeTableBuilder();
+                    //        builder.AddCustomAttributes(
+                    //            i,
+                    //            new DesignerAttribute(j));
+                    //        MetadataStore.AddAttributeTable(builder.CreateTable());
+                    //        Console.Write(", {0}", j.Name);
+                    //    }
+                    //}
+                    Console.WriteLine();
+                }
+
+                //c++;
+                //if (c>23)
+                //    break;
+            }
+
+            return category;
         }
         private void AddToolBox()
         {
