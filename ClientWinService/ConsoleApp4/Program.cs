@@ -78,7 +78,8 @@ namespace ConsoleApp4
             //    m_SessionState = SessionSwitchReason.SessionUnlock;
             //    //I returned to my desk
             //}
-            m_SessionState = changeDescription.Reason;
+            if (changeDescription.Reason == SessionChangeReason.ConsoleConnect || changeDescription.Reason == SessionChangeReason.ConsoleDisconnect)
+                m_SessionState = changeDescription.Reason;
             //Utils.WriteLog(changeDescription.Reason.ToString());
             //base.OnSessionChange(changeDescription);
         }

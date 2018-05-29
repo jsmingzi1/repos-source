@@ -5,3 +5,10 @@ c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\bin\Debug\ConsoleAppClien
 c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\bin\Debug\ConsoleAppClient.pdb
 c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\obj\Debug\ConsoleAppClient.exe
 c:\users\lcm\source\repos\ConsoleApp4\ConsoleAppClient\obj\Debug\ConsoleAppClient.pdb
+D:\VS\source\repos\repos-source\ClientWinService\ConsoleAppClient\bin\Debug\ConsoleAppClient.exe.config
+D:\VS\source\repos\repos-source\ClientWinService\ConsoleAppClient\bin\Debug\ConsoleAppClient.exe
+D:\VS\source\repos\repos-source\ClientWinService\ConsoleAppClient\bin\Debug\ConsoleAppClient.pdb
+D:\VS\source\repos\repos-source\ClientWinService\ConsoleAppClient\obj\Debug\ConsoleAppClient.csprojResolveAssemblyReference.cache
+D:\VS\source\repos\repos-source\ClientWinService\ConsoleAppClient\obj\Debug\ConsoleAppClient.csproj.CoreCompileInputs.cache
+D:\VS\source\repos\repos-source\ClientWinService\ConsoleAppClient\obj\Debug\ConsoleAppClient.exe
+D:\VS\source\repos\repos-source\ClientWinService\ConsoleAppClient\obj\Debug\ConsoleAppClient.pdb

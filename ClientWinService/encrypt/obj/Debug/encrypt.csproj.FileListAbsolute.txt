@@ -5,3 +5,10 @@ C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.csproj.CoreCompi
 C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.exe
 C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.pdb
 C:\Users\lcm\source\repos\ConsoleApp4\encrypt\obj\Debug\encrypt.csprojResolveAssemblyReference.cache
+D:\VS\source\repos\repos-source\ClientWinService\encrypt\bin\Debug\encrypt.exe.config
+D:\VS\source\repos\repos-source\ClientWinService\encrypt\bin\Debug\encrypt.exe
+D:\VS\source\repos\repos-source\ClientWinService\encrypt\bin\Debug\encrypt.pdb
+D:\VS\source\repos\repos-source\ClientWinService\encrypt\obj\Debug\encrypt.csprojResolveAssemblyReference.cache
+D:\VS\source\repos\repos-source\ClientWinService\encrypt\obj\Debug\encrypt.csproj.CoreCompileInputs.cache
+D:\VS\source\repos\repos-source\ClientWinService\encrypt\obj\Debug\encrypt.exe
+D:\VS\source\repos\repos-source\ClientWinService\encrypt\obj\Debug\encrypt.pdb

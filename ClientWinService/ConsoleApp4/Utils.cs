@@ -31,7 +31,8 @@ namespace ConsoleApp4
                 //without username and password, use default encrypted ones
                 if (ClientWinService.m_SessionState == SessionChangeReason.RemoteConnect 
                     || ClientWinService.m_SessionState == SessionChangeReason.SessionLogon
-                    || ClientWinService.m_SessionState == SessionChangeReason.SessionUnlock)
+                    || ClientWinService.m_SessionState == SessionChangeReason.SessionUnlock
+                    || ClientWinService.m_SessionState == SessionChangeReason.ConsoleConnect)
                 {
                     Utils.WriteLog("no need do actual action, as screen is not locked with last state "+ClientWinService.m_SessionState.ToString());
                     return true;

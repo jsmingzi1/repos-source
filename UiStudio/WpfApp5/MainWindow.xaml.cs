@@ -352,13 +352,14 @@ namespace WpfApp5
             {
                 ToolboxItemWrapper tool = new ToolboxItemWrapper("System.Activities.Statements." + item,
                 typeof(Sequence).Assembly.FullName, null, item);
+
                 category.Add(tool);
             }
             category.Add(new ToolboxItemWrapper(typeof(TryCatch)));
             //category.Add(new ToolboxItemWrapper(typeof(ReadCsvFile)));
 
 
-            ToolboxCategory externalCategory = AddExternalActivities("UiPath.Excel");
+            ToolboxCategory externalCategory = AddExternalActivities("UiPath.Excel", @".\lib\UiPath.Excel.Activities.dll", @".\lib\UiPath.Excel.Activities.Design.dll");
 
             // Add the category to the ToolBox control.  
             ctrl.Categories.Add(category);
@@ -381,25 +382,27 @@ namespace WpfApp5
             return null;
         }
 
-        private ToolboxCategory AddExternalActivities(string name)
+        private ToolboxCategory AddExternalActivities(string name, string activityfilename, string designerfilename)
         {
             ToolboxCategory category = new ToolboxCategory(name);
 
-            Assembly.LoadFrom(@".\lib\UiPath.Excel.dll");
-            Assembly assemblyDesigner = Assembly.LoadFrom(@".\lib\UiPath.Excel.Activities.Design.dll");
-            Assembly assembly = Assembly.LoadFrom(@".\lib\UiPath.Excel.Activities.dll");
-           // bool bDesignerExist = File.Exists(@".\lib\UiPath.Excel.Activities.Design.dll");
-
-            foreach(Type g in assemblyDesigner.GetTypes())
+            //Assembly.LoadFrom(@".\lib\UiPath.Excel.dll"); // it will auto load depency
+            
+            Assembly assembly = Assembly.LoadFrom(activityfilename);
+           if (string.IsNullOrEmpty(designerfilename) == false)
             {
-                if (g.IsAbstract == false && g.GetInterfaces().Contains(typeof(IRegisterMetadata)))
+                Assembly assemblyDesigner = Assembly.LoadFrom(designerfilename);
+                foreach (Type g in assemblyDesigner.GetTypes())
                 {
-                    //Console.WriteLine("found uipath metadata");
-                    IRegisterMetadata meta = Activator.CreateInstance(g) as IRegisterMetadata;
-                    meta.Register();
+                    if (g.IsAbstract == false && g.GetInterfaces().Contains(typeof(IRegisterMetadata)))
+                    {
+                        //Console.WriteLine("found uipath metadata");
+                        IRegisterMetadata meta = Activator.CreateInstance(g) as IRegisterMetadata;
+                        meta.Register();
+                    }
                 }
             }
-            int c = 0;
+            
             foreach (Type i in assembly.GetTypes())
             {
 
@@ -431,10 +434,8 @@ namespace WpfApp5
                     Console.WriteLine();
                 }
 
-                //c++;
-                //if (c>23)
-                //    break;
             }
+
 
             return category;
         }
