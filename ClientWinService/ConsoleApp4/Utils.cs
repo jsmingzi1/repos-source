@@ -29,12 +29,16 @@ namespace ConsoleApp4
             if (type == 0)
             {
                 //without username and password, use default encrypted ones
-                if (ClientWinService.m_SessionState == SessionChangeReason.RemoteConnect 
-                    || ClientWinService.m_SessionState == SessionChangeReason.SessionLogon
-                    || ClientWinService.m_SessionState == SessionChangeReason.SessionUnlock
-                    || ClientWinService.m_SessionState == SessionChangeReason.ConsoleConnect)
+                //if (ClientWinService.m_SessionState == SessionChangeReason.RemoteConnect 
+                //    || ClientWinService.m_SessionState == SessionChangeReason.SessionLogon
+                //    || ClientWinService.m_SessionState == SessionChangeReason.SessionUnlock
+                //    || ClientWinService.m_SessionState == SessionChangeReason.ConsoleConnect)
+                SessionHelper shlp = new SessionHelper();
+                string user = shlp.GetConsoleUser();
+                bool bActive = shlp.IsConsoleActive();
+                if (bActive)
                 {
-                    Utils.WriteLog("no need do actual action, as screen is not locked with last state "+ClientWinService.m_SessionState.ToString());
+                    Utils.WriteLog("no need do actual action, as console is active with user " + user);
                     return true;
                 }
                 else
