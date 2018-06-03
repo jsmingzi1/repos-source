@@ -1,0 +1,8 @@
+
+*.opendb
+*.ide-shm
+*.ide-wal
+*.db-shm
+*.db-wal
+*.pdb
+*.pdb

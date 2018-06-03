@@ -36,7 +36,7 @@ namespace ConsoleApp4
                 SessionHelper shlp = new SessionHelper();
                 string user = shlp.GetConsoleUser();
                 bool bActive = shlp.IsConsoleActive();
-                if (bActive)
+                if (bActive && shlp.IsConsoleSessionLocked() == false)
                 {
                     Utils.WriteLog("no need do actual action, as console is active with user " + user);
                     return true;

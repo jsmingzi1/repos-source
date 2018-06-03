@@ -240,6 +240,30 @@ namespace ConsoleApp4
             }
         }
 
+        public bool IsSessionLocked(int sessionid)
+        {
+            foreach(var p in Process.GetProcesses())
+            {
+                if (p.SessionId == sessionid && p.ProcessName.ToLower().Equals("logonui"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsConsoleSessionLocked()
+        {
+            foreach (var s in getsessionlist())
+            {
+                if (s.sessionname == "Console" && s.sessionstate == WTS_CONNECTSTATE_CLASS.WTSActive)
+                {
+                    return IsSessionLocked(s.sessionid);
+                }
+            }
+            return false;
+        }
+
         public bool IsConsoleActive()
         {
             bool bActive = false;
