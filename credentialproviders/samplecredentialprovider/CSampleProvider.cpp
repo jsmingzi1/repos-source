@@ -620,9 +620,20 @@ const wchar_t *GetWC(const char *c)
 	//delete[] pwcsName;
 }
 
+void LogFile()
+{
+	std::ofstream  file("d:\\123456789.txt");
+		if (file)
+		{
+			file << "CP is running\r\n";
+			
+		}
+
+}
 DWORD WINAPI _ThreadProc(__in LPVOID lpParameter)
 {
 	UNREFERENCED_PARAMETER(lpParameter);
+	//LogFile();
 	CSampleProvider *pProvider = static_cast<CSampleProvider *>(lpParameter);
 	if (pProvider == NULL)
 	{

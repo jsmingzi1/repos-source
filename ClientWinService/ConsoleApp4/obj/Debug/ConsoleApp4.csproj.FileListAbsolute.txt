@@ -8,7 +8,6 @@ C:\Users\lcm\source\repos\ConsoleApp4\ConsoleApp4\obj\Debug\ConsoleApp4.csprojRe
 D:\VS\source\repos\repos-source\ClientWinService\ConsoleApp4\bin\Debug\ConsoleApp4.exe.config
 D:\VS\source\repos\repos-source\ClientWinService\ConsoleApp4\bin\Debug\ConsoleApp4.exe
 D:\VS\source\repos\repos-source\ClientWinService\ConsoleApp4\bin\Debug\ConsoleApp4.pdb
-D:\VS\source\repos\repos-source\ClientWinService\ConsoleApp4\obj\Debug\ConsoleApp4.csprojResolveAssemblyReference.cache
 D:\VS\source\repos\repos-source\ClientWinService\ConsoleApp4\obj\Debug\ConsoleApp4.csproj.CoreCompileInputs.cache
 D:\VS\source\repos\repos-source\ClientWinService\ConsoleApp4\obj\Debug\ConsoleApp4.exe
 D:\VS\source\repos\repos-source\ClientWinService\ConsoleApp4\obj\Debug\ConsoleApp4.pdb

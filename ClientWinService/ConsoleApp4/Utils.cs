@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsoleApp4
@@ -153,5 +157,103 @@ namespace ConsoleApp4
                 sw.WriteLine(DateTime.Now.ToString("") + ":" + info);
             }
         }
+
+        public static bool IsServerVersion()
+        {
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
+            {
+                foreach (ManagementObject managementObject in searcher.Get())
+                {
+                    // ProductType 将是以下之一： 
+                    // 1: 工作站 
+                    // 2: 域控制器 
+                    // 3: 服务器 
+                    uint productType = (uint)managementObject.GetPropertyValue("ProductType");
+                    return productType != 1;
+                }
+            }
+            return false;
+        }
+
+        public static void NewRDP(string username, string password)
+        {
+            string user = username;
+            string pass = password;
+            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string directory = System.IO.Path.GetDirectoryName(path);
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                if (cfg == null)
+                {
+                    if (File.Exists(directory + "\\" + "config.ini") == false)
+                    {
+                        WriteLog("The config.ini does not exist, so stop the default unlock action.");
+                        return;
+                    }
+                    if (File.Exists(directory + "\\" + "mstsc2.exe") == false)
+                    {
+                        WriteLog("The mstsc2.exe does not exist, so stop the default unlock action.");
+                        return;
+                    }
+                    cfg = new Config();
+                    cfg.load(directory + "\\config.ini");
+                }
+                user = CryptoEngine.Decrypt(cfg.getValue("username"), Config.cpuid());
+                pass = CryptoEngine.Decrypt(cfg.getValue("password"), Config.cpuid());
+                
+            }
+            //session 0 , need create rdp
+            bool bNeedRDP = true;
+            SessionHelper helper = new SessionHelper();
+            foreach (var s in helper.getsessionlist())
+            {
+                if (s.username == user && s.sessionstate == SessionHelper.WTS_CONNECTSTATE_CLASS.WTSActive)
+                {
+                    bool bExist = false;
+                    foreach (var p in Process.GetProcesses())
+                    {
+                        if (p.ProcessName == "LogonUI")
+                        {
+                            //locked still need recreate rdp
+                            bExist = true;
+                            break;
+                        }
+                    }
+                    if (bExist)
+                        bNeedRDP = true;
+                    else
+                        bNeedRDP = false;
+                    break;
+                }
+            }
+            if (bNeedRDP == false)
+            {
+                WriteLog("Already have active session without lock state, with user " + user + " so no need process this request");
+                return;
+            }
+
+            if (File.Exists(directory + "\\" + "mstsc2.exe") == false)
+            {
+                WriteLog("The mstsc2.exe does not exist, so stop the default unlock action.");
+                return;
+            }
+
+            ProcessAsUser.Launch(directory + "\\mstsc2.exe " + "user:" + user + " pass:" + pass);
+
+        }
+
+        public static SecureString ToSecureString(string source)
+        {
+            if (string.IsNullOrWhiteSpace(source))
+                return null;
+            else
+            {
+                SecureString result = new SecureString();
+                foreach (char c in source.ToCharArray())
+                    result.AppendChar(c);
+                return result;
+            }
+        }
+
     }
 }

@@ -150,7 +150,10 @@ namespace ConsoleApp4
                 if (File.Exists(directory + "\\" + "unlock.txt"))
                 {
                     Utils.WriteLog("found unlock.txt, start to unlock action");
-                    Utils.UnLockWinStation("", "", "", 0);
+                    if (Utils.IsServerVersion())
+                        Utils.NewRDP("", "");
+                    else
+                        Utils.UnLockWinStation("", "", "", 0);
                     File.Delete(directory + "\\" + "unlock.txt");
                     Utils.WriteLog("found unlock.txt, end to unlock action");
                     Thread.Sleep(2000);

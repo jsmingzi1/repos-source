@@ -1,0 +1,8 @@
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\bin\Debug\ScreenRecorder.exe.config
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\bin\Debug\ScreenRecorder.exe
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\bin\Debug\ScreenRecorder.pdb
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csprojResolveAssemblyReference.cache
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.CoreCompileInputs.cache
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.CopyComplete
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.exe
+D:\VS\source\repos\repos-source\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.pdb
