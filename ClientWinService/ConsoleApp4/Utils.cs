@@ -183,18 +183,30 @@ namespace ConsoleApp4
             string directory = System.IO.Path.GetDirectoryName(path);
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                if (cfg == null)
+                //always reload config file for different users
+                //if (cfg == null)
+
+                if (File.Exists(directory + "\\" + "mstsc2.exe") == false)
+                {
+                    WriteLog("The mstsc2.exe does not exist, so stop the default unlock action.");
+                    return;
+                }
+
+                string filename = File.ReadAllText(directory + "\\unlock.txt");
+                
+                if (File.Exists(directory + "\\" + filename))
+                {
+                    cfg = new Config();
+                    cfg.load(directory + "\\" + filename);
+                }
+                else
                 {
                     if (File.Exists(directory + "\\" + "config.ini") == false)
                     {
                         WriteLog("The config.ini does not exist, so stop the default unlock action.");
                         return;
                     }
-                    if (File.Exists(directory + "\\" + "mstsc2.exe") == false)
-                    {
-                        WriteLog("The mstsc2.exe does not exist, so stop the default unlock action.");
-                        return;
-                    }
+                    
                     cfg = new Config();
                     cfg.load(directory + "\\config.ini");
                 }
@@ -229,12 +241,6 @@ namespace ConsoleApp4
             if (bNeedRDP == false)
             {
                 WriteLog("Already have active session without lock state, with user " + user + " so no need process this request");
-                return;
-            }
-
-            if (File.Exists(directory + "\\" + "mstsc2.exe") == false)
-            {
-                WriteLog("The mstsc2.exe does not exist, so stop the default unlock action.");
                 return;
             }
 
