@@ -23,7 +23,7 @@
 
             <Custom:RibbonTab Header="DESIGN">
                 <Custom:RibbonGroup Header="File">
-                    <Custom:RibbonSplitButton Label="New" LabelPosition="DropDown" LargeImageSource="Resources/New.PNG" SmallImageSource="Resources/New.PNG">
+                    <Custom:RibbonSplitButton Label="New" LabelPosition="DropDown" LargeImageSource="Resources/New.PNG" SmallImageSource="Resources/New.PNG" Click="RibbonButton_NewSequence">
                         <Custom:RibbonMenuItem Header="Sequence" Click="RibbonButton_NewSequence" ImageSource="Resources/Sequence.PNG"/>
                         <Custom:RibbonMenuItem Header="Flowchart" Click="RibbonButton_NewFlowchart" ImageSource="Resources/Flowchart.PNG"/>
                         <Custom:RibbonMenuItem Header="StateMachine" Click="RibbonButton_NewStateMachine" ImageSource="Resources/StateMachine.PNG"/>
@@ -49,7 +49,7 @@
                 </Custom:RibbonGroup>
                 <Custom:RibbonGroup>
                     <Custom:RibbonButton Label="Validate" LargeImageSource="Resources/Validate.PNG" SmallImageSource="Resources/Validate.PNG"/>
-                    <Custom:RibbonSplitButton Label="Breakpoints" LargeImageSource="Resources/Breakpoints.PNG" SmallImageSource="Resources/Breakpoints.PNG" IsDropDownOpen="False" LabelPosition="DropDown">
+                    <Custom:RibbonSplitButton Label="Breakpoints" LargeImageSource="Resources/Breakpoints.PNG" SmallImageSource="Resources/Breakpoints.PNG" IsDropDownOpen="False" LabelPosition="DropDown" Click="RibbonMenuItem_ClickToggle">
                         <Custom:RibbonMenuItem Header="Toggle Breakpoint" ImageSource="Resources/Toggle.PNG" Click="RibbonMenuItem_ClickToggle"/>
                         <Custom:RibbonMenuItem Header="Remove Breakpoint" ImageSource="Resources/Remove.PNG" Click="RibbonMenuItem_ClickRemove"/>
                     </Custom:RibbonSplitButton>

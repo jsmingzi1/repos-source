@@ -93,6 +93,7 @@ namespace WpfApp5
         {
             TreeViewItem item = new TreeViewItem();
             item.IsExpanded = false;
+            //item.IsExpanded = true;
 
             // create stack panel
             StackPanel stack = new StackPanel();
@@ -506,6 +507,7 @@ namespace WpfApp5
         //save
         private void RibbonButton_Save(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             if (m_documentpane.Children.Count > 0)
             {
                 foreach (LayoutDocument d in m_DesignerList.Keys)
@@ -520,6 +522,45 @@ namespace WpfApp5
             }
 
         }
+
+        private void RibbonMenuItem_SaveAll(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            foreach (LayoutDocument doc in m_documentpane.Children)
+            {
+                m_DesignerList[doc].Flush();
+                m_DesignerList[doc].Save(doc.ToolTip.ToString());
+            }
+        }
+
+        private void RibbonMenuItem_SaveAs(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            if (string.IsNullOrEmpty(m_projectfolder))
+            {
+                MessageBox.Show("you should at least have a project first, then can create new file");
+            }
+            else if (m_documentpane.ChildrenCount > 0)
+            {
+                NewFileWindow win = new NewFileWindow(m_projectfolder);
+                if (win.ShowDialog() == true)
+                {
+                    string filename = win.GetFileName("");
+                    if (!string.IsNullOrEmpty(filename))
+                    {
+                        LayoutDocument doc = (LayoutDocument)m_documentpane.SelectedContent;
+                        WorkflowDesigner designer = m_DesignerList[doc];
+
+                        Directory.Move(doc.ToolTip.ToString(), m_projectfolder + "\\" + filename);
+                        RefreshProject();
+                        doc.ToolTip = filename;
+                        designer.Load(m_projectfolder + "\\" + filename);
+
+                    }
+                }
+            }
+        }
+
 
         //open
         private void RibbonButton_Open(object sender, RoutedEventArgs e)
@@ -550,8 +591,10 @@ namespace WpfApp5
             }
         }
 
+        //set e.Handled = true, then the upper ribbon button won't retrive the event again
         private void RibbonButton_NewSequence(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             if (string.IsNullOrEmpty(m_projectfolder))
             {
                 MessageBox.Show("you should at least have a project first, then can create new file");
@@ -559,17 +602,21 @@ namespace WpfApp5
             else
             {
                 NewFileWindow win = new NewFileWindow(m_projectfolder);
-                win.ShowDialog();
-                string filename = win.GetFileName("");
-                if (!string.IsNullOrEmpty(filename))
+                if (win.ShowDialog() == true)
                 {
-                    NewDesignerFile(filename, 0);
+                    string filename = win.GetFileName("");
+                    if (!string.IsNullOrEmpty(filename))
+                    {
+                        NewDesignerFile(filename, 0);
+                    }
                 }
+                
             }
         }
 
         private void RibbonButton_NewFlowchart(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             if (string.IsNullOrEmpty(m_projectfolder))
             {
                 MessageBox.Show("you should at least have a project first, then can create new file");
@@ -577,16 +624,21 @@ namespace WpfApp5
             else
             {
                 NewFileWindow win = new NewFileWindow(m_projectfolder);
-                win.ShowDialog();
-                string filename = win.GetFileName("");
-                if (!string.IsNullOrEmpty(filename))
+                if (win.ShowDialog() == true)
                 {
-                    NewDesignerFile(filename, 1);
+                    string filename = win.GetFileName("");
+                    if (!string.IsNullOrEmpty(filename))
+                    {
+                        NewDesignerFile(filename, 1);
+                    }
+
                 }
+                
             }
         }
         private void RibbonButton_NewStateMachine(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             if (string.IsNullOrEmpty(m_projectfolder))
             {
                 MessageBox.Show("you should at least have a project first, then can create new file");
@@ -594,11 +646,13 @@ namespace WpfApp5
             else
             {
                 NewFileWindow win = new NewFileWindow(m_projectfolder);
-                win.ShowDialog();
-                string filename = win.GetFileName("");
-                if (!string.IsNullOrEmpty(filename))
+                if (win.ShowDialog()==true)
                 {
-                    NewDesignerFile(filename, 2);
+                    string filename = win.GetFileName("");
+                    if (!string.IsNullOrEmpty(filename))
+                    {
+                        NewDesignerFile(filename, 2);
+                    }
                 }
             }
         }
@@ -1006,6 +1060,7 @@ namespace WpfApp5
         //set break point
         private void RibbonMenuItem_ClickToggle(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             if (m_documentpane.ChildrenCount > 0)
             {
                 WorkflowDesigner designer = m_DesignerList[(LayoutDocument)m_documentpane.SelectedContent];
@@ -1060,6 +1115,7 @@ namespace WpfApp5
 
         private void RibbonMenuItem_ClickRemove(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             if (m_documentpane.ChildrenCount > 0)
             {
                 WorkflowDesigner designer = m_DesignerList[(LayoutDocument)m_documentpane.SelectedContent];
@@ -1118,39 +1174,6 @@ namespace WpfApp5
             }
         }
 
-        private void RibbonMenuItem_SaveAll(object sender, RoutedEventArgs e)
-        {
-            foreach (LayoutDocument doc in m_documentpane.Children)
-            {
-                m_DesignerList[doc].Flush();
-                m_DesignerList[doc].Save(doc.ToolTip.ToString());
-            }
-        }
-
-        private void RibbonMenuItem_SaveAs(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(m_projectfolder))
-            {
-                MessageBox.Show("you should at least have a project first, then can create new file");
-            }
-            else if (m_documentpane.ChildrenCount > 0)
-            {
-                NewFileWindow win = new NewFileWindow(m_projectfolder);
-                win.ShowDialog();
-                string filename = win.GetFileName("");
-                if (!string.IsNullOrEmpty(filename))
-                {
-                    LayoutDocument doc = (LayoutDocument)m_documentpane.SelectedContent;
-                    WorkflowDesigner designer = m_DesignerList[doc];
-
-                    Directory.Move(doc.ToolTip.ToString(), m_projectfolder + "\\" + filename);
-                    RefreshProject();
-                    doc.ToolTip = filename;
-                    designer.Load(m_projectfolder + "\\" + filename);
-                    
-                }
-            }
-        }
 
         private void RibbonButtonAddActivity_Click(object sender, RoutedEventArgs e)
         {

@@ -42,16 +42,16 @@ namespace WpfApp5
             else
             {
                 m_ret_filename = m_filename.Text;
-                this.Close();
-                //this.DialogResult = true;
+                //this.Close();
+                DialogResult = true;
             }
         }
 
         //cancel
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            //this.DialogResult = false;
+            //this.Close();
+            DialogResult = false;
         }
 
         public string GetFileName(string filename)
