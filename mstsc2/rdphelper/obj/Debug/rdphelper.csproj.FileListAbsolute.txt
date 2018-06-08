@@ -1,0 +1,15 @@
+C:\Users\lcm\source\repos\rdphelper\rdphelper\bin\Debug\rdphelper.exe.config
+C:\Users\lcm\source\repos\rdphelper\rdphelper\bin\Debug\rdphelper.exe
+C:\Users\lcm\source\repos\rdphelper\rdphelper\bin\Debug\rdphelper.pdb
+C:\Users\lcm\source\repos\rdphelper\rdphelper\bin\Debug\Interop.MSTSCLib.dll
+C:\Users\lcm\source\repos\rdphelper\rdphelper\bin\Debug\AxInterop.MSTSCLib.dll
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\Interop.MSTSCLib.dll
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\AxInterop.MSTSCLib.dll
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.csproj.ResolveComReference.cache
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.Form1.resources
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.Properties.Resources.resources
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.csproj.GenerateResource.cache
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.csproj.CoreCompileInputs.cache
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.exe
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.pdb
+C:\Users\lcm\source\repos\rdphelper\rdphelper\obj\Debug\rdphelper.csprojResolveAssemblyReference.cache

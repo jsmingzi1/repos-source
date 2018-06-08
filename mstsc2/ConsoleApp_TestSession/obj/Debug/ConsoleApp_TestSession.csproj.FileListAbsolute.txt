@@ -1,0 +1,7 @@
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_TestSession\bin\Debug\ConsoleApp_TestSession.exe.config
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_TestSession\bin\Debug\ConsoleApp_TestSession.exe
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_TestSession\bin\Debug\ConsoleApp_TestSession.pdb
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_TestSession\obj\Debug\ConsoleApp_TestSession.csproj.CoreCompileInputs.cache
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_TestSession\obj\Debug\ConsoleApp_TestSession.exe
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_TestSession\obj\Debug\ConsoleApp_TestSession.pdb
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_TestSession\obj\Debug\ConsoleApp_TestSession.csprojResolveAssemblyReference.cache

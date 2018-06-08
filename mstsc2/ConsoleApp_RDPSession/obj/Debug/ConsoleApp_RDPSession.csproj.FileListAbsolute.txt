@@ -1,0 +1,8 @@
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\bin\Debug\ConsoleApp_RDPSession.exe.config
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\bin\Debug\ConsoleApp_RDPSession.exe
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\bin\Debug\ConsoleApp_RDPSession.pdb
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\obj\Debug\ConsoleApp_RDPSession.csproj.CoreCompileInputs.cache
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\obj\Debug\ConsoleApp_RDPSession.csproj.CopyComplete
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\obj\Debug\ConsoleApp_RDPSession.exe
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\obj\Debug\ConsoleApp_RDPSession.pdb
+C:\Users\lcm\source\repos\rdphelper\ConsoleApp_RDPSession\obj\Debug\ConsoleApp_RDPSession.csprojResolveAssemblyReference.cache
