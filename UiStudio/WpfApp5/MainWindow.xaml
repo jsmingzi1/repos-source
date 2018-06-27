@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:WpfApp5"
         xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WpfApp5.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="2000" WindowState="Maximized">
+        Title="UiStudio" Height="1000" Width="2000" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="145"/>

@@ -357,14 +357,36 @@ namespace WpfApp5
                 category.Add(tool);
             }
             category.Add(new ToolboxItemWrapper(typeof(TryCatch)));
-            //category.Add(new ToolboxItemWrapper(typeof(ReadCsvFile)));
-
-
-            ToolboxCategory externalCategory = AddExternalActivities("UiPath.Excel", @".\lib\UiPath.Excel.Activities.dll", @".\lib\UiPath.Excel.Activities.Design.dll");
-
-            // Add the category to the ToolBox control.  
             ctrl.Categories.Add(category);
-            ctrl.Categories.Add(externalCategory);
+
+
+            if (Directory.Exists(@".\Activities"))
+            {
+                foreach (var folder in Directory.GetDirectories(@".\Activities"))
+                {
+                    var foldername = new DirectoryInfo(folder).Name;
+                    ToolboxCategory externalCategory = null;
+
+                    foreach (var file in Directory.GetFiles(folder))
+                    {
+                        var filename = new FileInfo(file).Name;
+                        if (filename.EndsWith(".Activities.dll") && filename.Contains(".Core.") == false)
+                        {
+                            var prefix = filename.Replace(".Activities.dll", "");
+                            var designerfile = "";
+                            if (File.Exists(folder + "\\" + prefix + ".Activities.Design.dll"))
+                                designerfile = folder + "\\" + prefix + ".Activities.Design.dll";
+                            externalCategory = AddExternalActivities(foldername, file, designerfile);
+                        }
+                    }
+
+                    if (externalCategory == null)
+                        ;
+                    else
+                        ctrl.Categories.Add(externalCategory);
+                }
+            }
+
             return ctrl;
         }
 
@@ -456,7 +478,9 @@ namespace WpfApp5
                 {
                     if (m_documentpane.SelectedContent.ToolTip.ToString()==d.ToolTip.ToString())
                     {
+                        this.Hide();
                         RunDesigner(m_DesignerList[d]);
+                        this.Show();
                         break;
                     }
                 }
