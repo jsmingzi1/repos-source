@@ -6,4 +6,7 @@ and if get unlock.txt, it will send named pipe to cp;
 
 2. WpfApp1 is the source to rehosting wf designer(outdated)
 
-3. UiStudio is laster IDE, inherited from rehosting wf designer
+3. UiStudio is laster IDE, inherited from rehosting wf designer(latest)
+
+4. ConsoleApp_FlaUI is source code for click activity, it implements mouse click action
+
