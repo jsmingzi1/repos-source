@@ -8,5 +8,5 @@ and if get unlock.txt, it will send named pipe to cp;
 
 3. UiStudio is laster IDE, inherited from rehosting wf designer(latest)
 
-4. ConsoleApp_FlaUI is source code for click activity, it implements mouse click action
+4. UiActivities is source code for click activity, it implements mouse click action
 
