@@ -4,7 +4,7 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:sap="clr-namespace:System.Activities.Presentation;assembly=System.Activities.Presentation"
     xmlns:sapv="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sapc="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation" mc:Ignorable="d" x:Class="ClickActivity.ClickActivityDemoDesigner" Height="139" Width="297" Unloaded="ActivityDesigner_Unloaded" Background="#FF2A7ED3" BorderBrush="#FF245EB9" OpacityMask="#FF245EB9">
+    xmlns:sapc="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation" mc:Ignorable="d" x:Class="ClickActivity.ClickActivityDemoDesigner" Height="139" Width="297" Unloaded="ActivityDesigner_Unloaded" Background="#FF2A7ED3" BorderBrush="#FF245EB9" OpacityMask="#FF245EB9" Loaded="ActivityDesigner_Loaded" Initialized="ActivityDesigner_Initialized">
     <sap:ActivityDesigner.Resources>
         <ResourceDictionary>
             <sapc:ArgumentToExpressionConverter x:Key="ArgumentToExpressionConverter" />
@@ -28,7 +28,8 @@
             OwnerActivity="{Binding Path=ModelItem}" HorizontalScrollBarVisibility="Auto" RenderTransformOrigin="0.495,0.5" Margin="0,50,0,-50" Grid.Row="1">
         </sapv:ExpressionTextBox>
         <Border Height="60" Margin="0,40,0,-70"  BorderThickness="2" BorderBrush="Gray">
-            <Image x:Name="img" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="283" Stretch="Fill"/>
+            <Image x:Name="img" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="283" Stretch="Fill"
+                   Source="{Binding Path=ModeItem.ImgName, Converter={StaticResource ArgumentToExpressionConverter}, Mode=TwoWay, ConverterParameter=In}"/>
         </Border>
     </Grid>
 </sap:ActivityDesigner>

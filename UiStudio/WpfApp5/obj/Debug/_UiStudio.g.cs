@@ -86,6 +86,8 @@ namespace XamlStaticHelperNamespace {
             assemblyList.Add(Load("WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
             assemblyList.Add(Load("Microsoft.Windows.Shell, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31b" +
                         "f3856ad364e35"));
+            assemblyList.Add(Load("Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6ae" +
+                        "ed"));
             assemblyList.Add(Load("RibbonControlsLibrary, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3" +
                         "856ad364e35"));
             assemblyList.Add(Load("Xceed.Wpf.AvalonDock, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f3" +

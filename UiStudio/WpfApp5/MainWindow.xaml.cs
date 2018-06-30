@@ -1,4 +1,5 @@
 ﻿using Microsoft.Windows.Controls.Ribbon;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Activities;
 using System.Activities.Core.Presentation;
@@ -33,6 +34,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using Xceed.Wpf.AvalonDock.Layout;
 
 namespace UiStudio
@@ -159,6 +161,19 @@ namespace UiStudio
             else
                 m_projectfolder = projectfolder;
 
+            if (File.Exists(projectfolder+"\\project.json") == false)
+            {
+                m_projectfolder = "";
+                return false;
+            }
+            else
+            {
+                JObject o = JObject.Parse(File.ReadAllText(projectfolder + "\\project.json"));
+
+                // get name token of first person and convert to a string
+                string name = (string)o.SelectToken("name");
+                this.Title = "UiStudio - " + name;
+            }
             m_textbox_projectfolder.Text = m_projectfolder;
 
             m_treeview_projectfolder.Items.Clear();
@@ -170,7 +185,8 @@ namespace UiStudio
             m_DesignerList.Clear();
             m_outlinepane.Content = null;
             m_propertiespane.Content = null;
-            
+
+            Directory.SetCurrentDirectory(projectfolder);
             return true;
         }
 

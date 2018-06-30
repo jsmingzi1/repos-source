@@ -6,6 +6,7 @@ using System.Activities;
 using System.ComponentModel;
 using System.Activities.Presentation.Metadata;
 using FlaUI.UIA3;
+using System.Windows.Markup;
 
 namespace ClickActivity
 {
@@ -17,6 +18,8 @@ namespace ClickActivity
         // 定义一个字符串类型的活动输入参数
         public InArgument<string> Text { get; set; }
 
+        [Browsable(false)]
+        public InArgument<string> ImgName { get; set; }
         
         public ClickTypeEnum  MouseButton { get; set; }
 

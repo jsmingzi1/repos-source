@@ -65,10 +65,12 @@ namespace ClickActivity
                     break;
                 }
             }
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            
             MinimizeCurrent();
             var path = this.textbox2.Expression.Content.ComputedValue.ToString();
             Task.Run(() =>
@@ -213,19 +215,25 @@ namespace ClickActivity
                 e1 = LastElement;
                 result = LastXPath;
             }
-
+            
             ModelItem.Properties["Text"].SetValue(new InArgument<String>(result));
             //Bitmap bt = e1.Capture();
             //bt.Save(@"d:\3.bmp");
             //e1.
-            String filename = @"d:\ScreenCapture-" + DateTime.Now.ToString("ddMMyyyy-hhmmss") + ".png";
-            ScreenShot(filename, (int)LastRect.Top, (int)LastRect.Left, (int)LastRect.Width, (int)LastRect.Height);
+            String shotpath = Environment.CurrentDirectory + "\\.screenshots";
+            if (Directory.Exists(shotpath) == false)
+                Directory.CreateDirectory(shotpath);
 
-            BitmapImage image = new BitmapImage(new Uri(filename, UriKind.Absolute));
+
+
+            String filename = "ScreenCapture-" + DateTime.Now.ToString("ddMMyyyy-hhmmss") + ".png";
+            ScreenShot(shotpath + "\\" + filename, (int)LastRect.Top, (int)LastRect.Left, (int)LastRect.Width, (int)LastRect.Height);
+
+            BitmapImage image = new BitmapImage(new Uri(shotpath + "\\" + filename, UriKind.Absolute));
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.Freeze();
             img.Source = image;
-            
+            ModelItem.Properties["ImgName"].SetValue(new InArgument<String>(filename));
             return true;
         }
 
@@ -409,6 +417,7 @@ namespace ClickActivity
         //test
         private void test()
         {
+            //MessageBox.Show(img.Source.ToString());
             //MessageBox.Show("button click: " + this.textbox2.Expression.Content.ComputedValue);
             //MessageBox.Show(FormatXPath("/Windows/Panel/Panel/Button[@Name='9']"));
             var e1 = automation.GetDesktop();
@@ -502,6 +511,35 @@ namespace ClickActivity
         {
             MinimizeCurrent();
                 Start();
+        }
+
+        private void ActivityDesigner_Loaded(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show(Environment.CurrentDirectory);
+            String shotpath = Environment.CurrentDirectory + "\\.screenshots";
+            if (Directory.Exists(shotpath) == false)
+                Directory.CreateDirectory(shotpath);
+            if (ModelItem.Properties["ImgName"].Value is null)
+                return;
+            InArgument<string> inArgument = ModelItem.Properties["ImgName"].Value.GetCurrentValue() as InArgument<string>;
+            if (inArgument.Expression is null)
+            { }
+            else 
+            {
+                string imgfile = inArgument.Expression.ToString();
+                if (File.Exists(shotpath + "\\" + imgfile))
+                {
+                    BitmapImage image = new BitmapImage(new Uri(shotpath + "\\" + imgfile, UriKind.Absolute));
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.Freeze();
+                    img.Source = image;
+                }
+            }
+        }
+
+        private void ActivityDesigner_Initialized(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Ui Activity Init");
         }
     }
 }
