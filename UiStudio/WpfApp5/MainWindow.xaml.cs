@@ -35,7 +35,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace WpfApp5
+namespace UiStudio
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -345,7 +345,7 @@ namespace WpfApp5
             ToolboxControl ctrl = new ToolboxControl();
 
             // Create a category.  
-            ToolboxCategory category = new ToolboxCategory("Activities");
+            ToolboxCategory category = new ToolboxCategory("Microsoft");
 
 
             string[] list = { "Assign", "CancellationScope", "CompensableActivity", "Compensate", "CompensationExtension", "Confirm", "CreateBookmarkScope", "Delay", "DeleteBookmarkScope", "DoWhile", "DurableTimerExtension", "Flowchart", "FlowDecision", "FlowStep", "InvokeAction", "If", "InvokeDelegate", "InvokeMethod", "NoPersistScope", "Parallel", "Persist", "Pick", "PickBranch", "Rethrow", "Sequence", "State", "StateMachine", "TerminateWorkflow", "Throw", "TransactionScope", "Transition", "While", "WorkflowTerminatedException", "WriteLine" };
@@ -503,29 +503,64 @@ namespace WpfApp5
 
                 // invoke workflow
                 Activity wf = ActivityXamlServices.Load(stream);
-                IDictionary<string, object> results = WorkflowInvoker.Invoke(wf);
 
-                //textBox.Text = wd.Text;
-                // show results
-                //textBox.Text = "Workflow Executed";
-                //textBox.Text += "\r\nReturned data:";
-                if (results.Count > 0)
-                {
-                    foreach (string key in results.Keys)
+                var wfApp = new WorkflowApplication(wf);
+                wfApp.OnUnhandledException +=
+                    delegate (WorkflowApplicationUnhandledExceptionEventArgs e)
                     {
-                        m_console_textbox.Text += string.Format("{0} : {1}\r\n", key, results[key]);
-                    }
-                }
-                else
+                        //Console.WriteLine(e.ToString());
+                        Console.WriteLine("Workflow Abort\r\n");
+                        return UnhandledExceptionAction.Abort;
+                    };
+                wfApp.Completed += delegate (WorkflowApplicationCompletedEventArgs e)
                 {
-                    //textBox.Text += "<no data returned>\r\n";
-                }
+                    if (e.CompletionState == ActivityInstanceState.Faulted)
+                    {
+                        Console.WriteLine("Workflow Terminated.");
+                        Console.WriteLine("Exception: {0}\n{1}",
+                            e.TerminationException.GetType().FullName,
+                            e.TerminationException.Message);
+                    }
+                    else if (e.CompletionState == ActivityInstanceState.Canceled)
+                    {
+                        Console.WriteLine("Workflow Canceled.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Workflow Completed.");
+
+                        // Retrieve the outputs of the workflow.
+                        foreach (var kvp in e.Outputs)
+                        {
+                            Console.WriteLine("Name: {0} - Value {1}",
+                                kvp.Key, kvp.Value);
+                        }
+
+                        // Outputs can be directly accessed by argument name.
+                        Console.WriteLine("The winner is {0}.", e.Outputs["Winner"]);
+                    }
+                };
+
+                wfApp.Run();
+                
+                //IDictionary<string, object> results = WorkflowInvoker.Invoke(wf);
+                //if (results.Count > 0)
+                //{
+                //    foreach (string key in results.Keys)
+                //    {
+                //        m_console_textbox.Text += string.Format("{0} : {1}\r\n", key, results[key]);
+                //    }
+                //}
+                //else
+                //{
+                //    //textBox.Text += "<no data returned>\r\n";
+                //}
             }
             catch (Exception ex)
             {
                 m_console_textbox.Text += string.Format("Error executing the Xaml. Exception type: {0}\r\nDetails:\r\n--------\r\n{1}\r\n", ex.GetType().FullName, ex.ToString());
             }
-            m_console_textbox.Text += "Workflow End\r\n";
+            //m_console_textbox.Text += "Workflow End\r\n";
         }
 
         //save

@@ -4,15 +4,14 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:sap="clr-namespace:System.Activities.Presentation;assembly=System.Activities.Presentation"
     xmlns:sapv="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sapc="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation" mc:Ignorable="d" x:Class="ClickActivity.ClickActivityDemoDesigner" Height="174" Width="297" Unloaded="ActivityDesigner_Unloaded" Background="#FF2A7ED3" BorderBrush="#FF245EB9" OpacityMask="#FF245EB9">
+    xmlns:sapc="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation" mc:Ignorable="d" x:Class="ClickActivity.ClickActivityDemoDesigner" Height="139" Width="297" Unloaded="ActivityDesigner_Unloaded" Background="#FF2A7ED3" BorderBrush="#FF245EB9" OpacityMask="#FF245EB9">
     <sap:ActivityDesigner.Resources>
         <ResourceDictionary>
             <sapc:ArgumentToExpressionConverter x:Key="ArgumentToExpressionConverter" />
         </ResourceDictionary>
     </sap:ActivityDesigner.Resources>
-    <Grid Height="60">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" HorizontalAlignment="Center">
@@ -20,7 +19,7 @@
                 Click here to Capture UI Element
             </Hyperlink>
         </TextBlock>
-        <Button Grid.Row="1" Content="Test" HorizontalAlignment="Right" Width="70" Height="20" Click="Button_Click"/>
+        <Button Grid.Row="0" Content="Test" HorizontalAlignment="Right" Width="28" Height="20" Click="Button_Click" Margin="0,5"/>
         <sapv:ExpressionTextBox x:Name="textbox2" VerticalAlignment="Center" Height="30"
             Expression="{Binding Path=ModelItem.Text, Converter={StaticResource ArgumentToExpressionConverter}, Mode=TwoWay,  ConverterParameter=In }"
             ExpressionType="s:String"
@@ -28,8 +27,8 @@
                                 Visibility="Hidden"
             OwnerActivity="{Binding Path=ModelItem}" HorizontalScrollBarVisibility="Auto" RenderTransformOrigin="0.495,0.5" Margin="0,50,0,-50" Grid.Row="1">
         </sapv:ExpressionTextBox>
-        <Border Height="60" Margin="0,40,0,-70" Grid.Row="1" BorderThickness="2" BorderBrush="Gray">
-        <Image x:Name="img" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="283" Stretch="Fill"/>
+        <Border Height="60" Margin="0,40,0,-70"  BorderThickness="2" BorderBrush="Gray">
+            <Image x:Name="img" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="283" Stretch="Fill"/>
         </Border>
     </Grid>
 </sap:ActivityDesigner>

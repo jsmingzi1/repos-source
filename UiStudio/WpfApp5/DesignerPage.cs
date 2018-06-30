@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace WpfApp5
+namespace UiStudio
 {
     class DesignerPage
     {

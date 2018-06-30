@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WpfApp5
+namespace UiStudio
 {
     /// <summary>
     /// NewFileWindow.xaml 的交互逻辑

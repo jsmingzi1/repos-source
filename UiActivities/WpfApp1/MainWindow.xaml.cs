@@ -318,7 +318,16 @@ namespace WpfApp1
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             //MessageBox.Show(FormatXPath("/Windows/Panel/Panel/Button[@Name='9']"));
+            // /Pane/Pane[@Name='Running applications']/ToolBar[@Name='Running applications']/Button[@Name='Calculator']
+            // /Pane/Pane[@Name='Running applications']/ToolBar[@Name='Running applications']/Button[@Name='Calculator']
+            // /Pane/Pane/Pane[@Name='Running applications']/ToolBar[@Name='Running applications']/Button[@Name='Calculator']
+            // /Pane/Pane/Pane[@Name='Running applications']/ToolBar[@Name='Running applications']/Button[@Name='Calculator']
+            Thread.Sleep(3000);
+            var et = automation.FromPoint(FlaUI.Core.Input.Mouse.Position);
+            var tmp = FlaUI.Core.Debug.GetXPathToElement(et);
             var e1 = automation.GetDesktop();
+            var e3 = e1.FindFirstByXPath("/Pane/Pane/Pane[@Name='Running applications']/ToolBar[@Name='Running applications']/Button[@Name='Calculator']");
+            e3.Click();
             string[] str =
             {
                 "/Window[@Name='Calculator']//Button[@Name='9']",

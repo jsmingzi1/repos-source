@@ -31,7 +31,7 @@ namespace ClickActivity
     // ActivityDesigner1.xaml 的交互逻辑
     public partial class ClickActivityDemoDesigner
     {
-        //HookProc _globalLlMouseHookCallback;
+        HookProc _globalLlMouseHookCallback;
         IntPtr _hGlobalLlMouseHook;
 
         //HookProc _globalLlKeyboardHookCallback;
@@ -40,6 +40,10 @@ namespace ClickActivity
         DispatcherTimer timer = null;
         UIA3Automation automation;
         AutomationElement HostElement = null;
+        AutomationElement LastElement = null;
+        FlaUI.Core.Shapes.Rectangle LastRect = null;
+
+        String LastXPath = "";
         public ClickActivityDemoDesigner()
         {
             InitializeComponent();
@@ -49,7 +53,7 @@ namespace ClickActivity
 
             automation = new UIA3Automation();
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromMilliseconds(500);//.FromSeconds(1);
             timer.Tick += Timer_Tick;
             //timer.Start();
             foreach (var i in automation.GetDesktop().FindAllChildren())
@@ -76,12 +80,24 @@ namespace ClickActivity
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            FlaUI.Core.Shapes.Point pt1 = FlaUI.Core.Input.Mouse.Position;
-            AutomationElement e1 = automation.FromPoint(pt1);
-            if (e1.Properties.ProcessId == Process.GetCurrentProcess().Id)
-                return;
+            try
+            {
+                FlaUI.Core.Shapes.Point pt1 = FlaUI.Core.Input.Mouse.Position;
+                AutomationElement e1 = automation.FromPoint(pt1);
+                if (e1.Properties.ProcessId == Process.GetCurrentProcess().Id)
+                    return;
 
-            e1.DrawHighlight(false, System.Windows.Media.Colors.Blue, TimeSpan.FromSeconds(1));
+                e1.DrawHighlight(false, System.Windows.Media.Colors.Blue, TimeSpan.FromMilliseconds(500));
+                if (e1 != LastElement)
+                {
+                    LastElement = e1;
+                    LastXPath = GetXPath(e1);
+                    LastRect = e1.BoundingRectangle;
+                }
+                
+            }
+            catch (Exception)
+            { }
         }
 
 
@@ -108,11 +124,11 @@ namespace ClickActivity
             if (_hGlobalLlMouseHook == IntPtr.Zero)
             {
                 // Create an instance of HookProc.
-                //_globalLlMouseHookCallback = LowLevelMouseProc;
+                _globalLlMouseHookCallback = LowLevelMouseProc;
                 
                 _hGlobalLlMouseHook = NativeMethods.SetWindowsHookEx(
                     HookType.WH_MOUSE_LL,
-                    LowLevelMouseProc,
+                    _globalLlMouseHookCallback,
                     mar,
                     0);
 
@@ -169,29 +185,41 @@ namespace ClickActivity
         bool PrintElement()
         {
             //var automation = new UIA3Automation();
-            FlaUI.Core.Shapes.Point pt1 = FlaUI.Core.Input.Mouse.Position;
+            //FlaUI.Core.Shapes.Point pt1 = FlaUI.Core.Input.Mouse.Position;
             AutomationElement e1;
-            try
-            {
-                e1 = automation.FromPoint(pt1);
-            }
-            catch (FileNotFoundException exception)
-            {
+            string result;
+            if (LastElement is null)
                 return false;
+            //if (LastElement is null)
+            //{
+            //    try
+            //    {
+                    
+            //        e1 = automation.FromPoint(pt1);
+            //    }
+            //    catch (FileNotFoundException exception)
+            //    {
+            //        return false;
+            //    }
+
+            //    if (e1.Properties.ProcessId == Process.GetCurrentProcess().Id)
+            //        return false;
+
+            //    e1.DrawHighlight(false, System.Windows.Media.Colors.Blue, TimeSpan.FromSeconds(1));
+            //    result = GetXPath(e1);// FormatXPath(GetXPath(e1));
+            //}
+            //else
+            {
+                e1 = LastElement;
+                result = LastXPath;
             }
-            
-            if (e1.Properties.ProcessId == Process.GetCurrentProcess().Id)
-                return false;
 
-            e1.DrawHighlight(false, System.Windows.Media.Colors.Blue, TimeSpan.FromSeconds(1));
-
-            string result = FormatXPath(GetXPath(e1));
             ModelItem.Properties["Text"].SetValue(new InArgument<String>(result));
             //Bitmap bt = e1.Capture();
             //bt.Save(@"d:\3.bmp");
             //e1.
             String filename = @"d:\ScreenCapture-" + DateTime.Now.ToString("ddMMyyyy-hhmmss") + ".png";
-            ScreenShot(filename, (int)e1.BoundingRectangle.Top, (int)e1.BoundingRectangle.Left, (int)e1.BoundingRectangle.Width, (int)e1.BoundingRectangle.Height);
+            ScreenShot(filename, (int)LastRect.Top, (int)LastRect.Left, (int)LastRect.Width, (int)LastRect.Height);
 
             BitmapImage image = new BitmapImage(new Uri(filename, UriKind.Absolute));
             image.CacheOption = BitmapCacheOption.OnLoad;
@@ -234,26 +262,29 @@ namespace ClickActivity
                 {
                     //if (System.Windows.Forms.Control.ModifierKeys.HasFlag(System.Windows.Forms.Keys.Control))
                     {
-                        //Invoke(new Action(() =>
+                        //Dispatcher.Invoke(new Action(() =>
                         //{
-                        //pt = FlaUI.Core.Input.Mouse.Position;
-                        //}));
-                        if (PrintElement())
-                        {
-                            Stop();
-                            NormalizeCurrent();
-                            //Application.Current.Dispatcher.Invoke(new Action(() =>
-                            //{
-                            //    Thread.Sleep(3000);
-                            //    NormalizeCurrent();
-                            //}));
-                        }
+ 
+                        //timer.Dispatcher.Invoke(new Action(() =>
+                        //{ 
+                            if (PrintElement())
+                            {
+                                Stop();
+                                NormalizeCurrent();
+                                //Application.Current.Dispatcher.Invoke(new Action(() =>
+                                //{
+                                //    Thread.Sleep(3000);
+                                //    NormalizeCurrent();
+                                //}));
+                            }
+                        //));
+                        
                         
                         //
                         //if (System.Windows.Forms.Control.ModifierKeys.HasFlag(System.Windows.Forms.Keys.Control))
-                        //    return 0;
-                        //else
                         //    return 1;
+                        //else
+                        //    return 0;
                     }
 
                     //Logger.Debug("Left Mouse up");
@@ -309,7 +340,7 @@ namespace ClickActivity
                 }
                 else
                 {
-                    if (previous == i)
+                    if (previous == i && i.Length == 0)
                         continue;
 
                     previous = i;
@@ -320,13 +351,14 @@ namespace ClickActivity
         }
         private string GetXPath(AutomationElement e)
         {
-            if (e.Parent is null)
+            var parent = e.Automation.TreeWalkerFactory.GetControlViewWalker().GetParent(e);
+            if (parent is null)
             {
-                return "/";
+                return "";
             }
             else
             {
-                return GetXPath(e.Parent) + "/" + e.ControlType + (String.IsNullOrEmpty(e.Name) ? "" : ("[@Name='" + e.Name + "']"));
+                return GetXPath(parent) + "/" + e.ControlType + (String.IsNullOrEmpty(e.Name) ? "" : ("[@Name='" + e.Name + "']"));
             }
         }
 

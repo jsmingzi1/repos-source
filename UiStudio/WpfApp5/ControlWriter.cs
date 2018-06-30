@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace WpfApp5
+namespace UiStudio
 {
 
     public class ControlWriter : TextWriter
@@ -38,7 +38,7 @@ namespace WpfApp5
             }
             else
             {
-                textbox.Dispatcher.Invoke(delegate{textbox.Text += value;});
+                textbox.Dispatcher.Invoke(delegate { textbox.Text += value; });
             }
         }
 

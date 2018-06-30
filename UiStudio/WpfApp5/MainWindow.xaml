@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-        xmlns:local="clr-namespace:WpfApp5"
-        xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WpfApp5.MainWindow"
+        xmlns:local="clr-namespace:UiStudio"
+        xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="UiStudio.MainWindow"
         mc:Ignorable="d"
-        Title="UiStudio" Height="1000" Width="2000" WindowState="Maximized">
+        Title="UiStudio" Height="800" Width="1200" WindowState="Normal">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="145"/>
@@ -64,7 +64,7 @@
         <xcad:DockingManager Grid.Row="1">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel Orientation="Horizontal">
-                    <xcad:LayoutAnchorablePane DockWidth="200">
+                    <xcad:LayoutAnchorablePane DockWidth="250">
                         <xcad:LayoutAnchorable Title="Activities">
                             <Grid Name="m_grid_toolbox"/>
                         </xcad:LayoutAnchorable>
@@ -75,7 +75,7 @@
                             <xcad:LayoutDocument Title="Doc2.xaml"/>
                         </xcad:LayoutDocumentPane>
                     </xcad:LayoutDocumentPaneGroup>
-                    <xcad:LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="200">
+                    <xcad:LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="250">
                         <xcad:LayoutAnchorablePane>
                             <xcad:LayoutAnchorable Title="Properties" x:Name="m_propertiespane"/>
                         </xcad:LayoutAnchorablePane>

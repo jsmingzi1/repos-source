@@ -53,7 +53,7 @@ namespace WpfApp5 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WpfApp5;component/window1.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/UiStudio;component/window1.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\Window1.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

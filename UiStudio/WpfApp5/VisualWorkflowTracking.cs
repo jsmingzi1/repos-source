@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp5
+namespace UiStudio
 {
     public class VisualTrackingParticipant : System.Activities.Tracking.TrackingParticipant
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 
-namespace WpfApp5
+namespace UiStudio
 {
 
     public sealed class CodeActivityDemo : CodeActivity
