@@ -86,7 +86,5 @@ D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.pdb
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.g.resources
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.Properties.Resources.resources
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.exe
-D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.FileListAbsolute.txt
-D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.dll
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\Newtonsoft.Json.dll
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\Newtonsoft.Json.xml

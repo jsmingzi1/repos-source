@@ -8,7 +8,7 @@
         xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="UiStudio.MainWindow"
         mc:Ignorable="d"
         Title="UiStudio" Height="800" Width="1200" WindowState="Normal">
-    <Grid>
+    <Grid Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="145"/>
             <RowDefinition/>
@@ -105,8 +105,8 @@
                                             </TreeViewItem>
                                         </TreeView>
                                     </Grid>
-                                    
-                                    
+
+
                                 </DockPanel>
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorGroup>
@@ -117,6 +117,12 @@
                         <xcad:LayoutAnchorGroup>
                             <xcad:LayoutAnchorable AutoHideHeight="200" FloatingHeight="200" Title="Output">
                                 <DockPanel>
+                                    <DockPanel.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black" Offset="0"/>
+                                            <GradientStop Color="White" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </DockPanel.Background>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="30"/>
@@ -129,8 +135,8 @@
                                         <TextBox Grid.Row="1" x:Name="m_console_searchbox"/>
                                         <TextBox Grid.Row="2" AcceptsReturn="True" x:Name="m_console_textbox"/>
                                     </Grid>
-                                    
-                                 </DockPanel>
+
+                                </DockPanel>
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorGroup>
                     </xcad:LayoutAnchorSide>
