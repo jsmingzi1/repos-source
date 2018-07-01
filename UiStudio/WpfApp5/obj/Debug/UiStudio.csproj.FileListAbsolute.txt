@@ -75,7 +75,6 @@ D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\WpfApp5_Activity1_Bef
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.XamlGeneratedCodeFileListAbsolute.txt
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.XamlGeneratedXamlFileListAbsolute.txt
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\AC2C1ABA-CCF6-44D4-8127-588FD4D0A860-DeferredValidationErrors.xml
-D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csprojResolveAssemblyReference.cache
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\UiStudio.exe.config
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\UiStudio.exe
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\UiStudio.pdb
@@ -88,3 +87,5 @@ D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.Properties.R
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.exe
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\Newtonsoft.Json.dll
 D:\VS\source\repos\repos-source\UiStudio\WpfApp5\bin\Debug\Newtonsoft.Json.xml
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.csproj.FileListAbsolute.txt
+D:\VS\source\repos\repos-source\UiStudio\WpfApp5\obj\Debug\UiStudio.dll

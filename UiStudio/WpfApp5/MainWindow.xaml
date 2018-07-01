@@ -45,7 +45,7 @@
                     <Custom:RibbonButton Label="Run" LargeImageSource="Resources/Run.PNG" SmallImageSource="Resources/Run.PNG" Click="RibbonButton_Run"/>
                     <Custom:RibbonButton Label="Stop" LargeImageSource="Resources/Stop.PNG" SmallImageSource="Resources/Stop.PNG" Click="RibbonButton_Stop"/>
                     <Custom:RibbonButton Label="Debug" LargeImageSource="Resources/Debug.PNG" SmallImageSource="Resources/Debug.PNG" Click="RibbonButton_Debug"/>
-                    <Custom:RibbonButton Label="Continue" LargeImageSource="Resources/Debug.PNG" SmallImageSource="Resources/Debug.PNG" Click="RibbonButton_Continue"/>
+                    <Custom:RibbonButton Label="Continue" LargeImageSource="Resources/Continue.PNG" SmallImageSource="Resources/Continue.PNG" Click="RibbonButton_Continue"/>
                 </Custom:RibbonGroup>
                 <Custom:RibbonGroup>
                     <Custom:RibbonButton Label="Validate" LargeImageSource="Resources/Validate.PNG" SmallImageSource="Resources/Validate.PNG"/>

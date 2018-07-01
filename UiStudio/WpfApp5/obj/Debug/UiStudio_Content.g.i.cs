@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("taiji0.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/continue.png")]
 
 

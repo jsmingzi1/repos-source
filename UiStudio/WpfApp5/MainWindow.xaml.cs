@@ -544,16 +544,6 @@ namespace UiStudio
                     else
                     {
                         Console.WriteLine("Workflow Completed.");
-
-                        // Retrieve the outputs of the workflow.
-                        foreach (var kvp in e.Outputs)
-                        {
-                            Console.WriteLine("Name: {0} - Value {1}",
-                                kvp.Key, kvp.Value);
-                        }
-
-                        // Outputs can be directly accessed by argument name.
-                        Console.WriteLine("The winner is {0}.", e.Outputs["Winner"]);
                     }
                 };
 
