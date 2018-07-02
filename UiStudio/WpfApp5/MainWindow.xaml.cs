@@ -251,6 +251,7 @@ namespace UiStudio
             {
                 doc = new LayoutDocument();
                 doc.Title = System.IO.Path.GetFileName(filename);
+                doc.IconSource = new BitmapImage(new Uri("Resources/Run.PNG", UriKind.Relative));
                 doc.ToolTip = filename;
                 m_documentpane.Children.Add(doc);
                 AddNewDesigner(doc, null);
