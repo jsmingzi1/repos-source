@@ -13,11 +13,18 @@
             <RowDefinition Height="145"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Custom:Ribbon Grid.Row="0" x:Name="Ribbon1">
+        <Custom:Ribbon Grid.Row="0" x:Name="Ribbon1" MaxHeight="300">
             <Custom:Ribbon.ApplicationMenu>
-                <Custom:RibbonApplicationMenu Label="START" >
-                    <Custom:RibbonApplicationMenuItem Header="Open" ImageSource="Resources/Open.PNG" Click="RibbonButton_Open"/>
-                    <Custom:RibbonApplicationMenuItem Header="Close" ImageSource="Resources/Exit.PNG" Click="RibbonButton_Close"/>
+                <Custom:RibbonApplicationMenu Label="START" SmallImageSource="Resources/Menu.PNG" DropDownHeight="1000">
+                        
+                        <Custom:RibbonApplicationMenuItem Header="New" ImageSource="Resources/New.PNG" Click="RibbonButton_NewProject"/>
+                        <Custom:RibbonApplicationMenuItem Header="Open" ImageSource="Resources/Open.PNG" Click="RibbonButton_OpenProject"/>
+                        <Custom:RibbonApplicationMenuItem Header="Close" ImageSource="Resources/close.PNG" Click="RibbonButton_CloseProject"/>
+                   
+               
+                    
+                    <Custom:RibbonSeparator/>
+                    <Custom:RibbonApplicationMenuItem Header="Exit" ImageSource="Resources/Exit.PNG" Click="RibbonButton_Close"/>
                 </Custom:RibbonApplicationMenu>
             </Custom:Ribbon.ApplicationMenu>
 

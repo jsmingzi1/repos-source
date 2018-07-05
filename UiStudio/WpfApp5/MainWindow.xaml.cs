@@ -1,4 +1,5 @@
-﻿using Microsoft.Windows.Controls.Ribbon;
+﻿using Microsoft.Win32;
+using Microsoft.Windows.Controls.Ribbon;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Activities;
@@ -91,7 +92,7 @@ namespace UiStudio
             //   MetadataStore.AddAttributeTable(builder.CreateTable());
            }
 
-    private TreeViewItem GetTreeView(string filename, string tooltip, bool bFile)
+        private TreeViewItem GetTreeView(string filename, string tooltip, bool bFile)
         {
             TreeViewItem item = new TreeViewItem();
             item.IsExpanded = false;
@@ -190,6 +191,7 @@ namespace UiStudio
             return true;
         }
 
+        //used to close project
         bool RefreshProject()
         {
             if (string.IsNullOrEmpty(m_projectfolder))
@@ -197,14 +199,15 @@ namespace UiStudio
                 m_textbox_projectfolder.Text = m_projectfolder;
 
                 m_treeview_projectfolder.Items.Clear();
-                m_treeview_projectfolder.Items.Add(BuildTreeView(m_projectfolder));
+                //m_treeview_projectfolder.Items.Add(BuildTreeView(m_projectfolder));
 
-                m_treeview_projectfolder.MouseDoubleClick += new MouseButtonEventHandler(treView_MouseDoubleClick);
+                //m_treeview_projectfolder.MouseDoubleClick += new MouseButtonEventHandler(treView_MouseDoubleClick);
 
                 m_documentpane.Children.Clear();
                 m_DesignerList.Clear();
                 m_outlinepane.Content = null;
                 m_propertiespane.Content = null;
+                this.Title = "UiStudio";
             }
             return true;
         }
@@ -627,6 +630,59 @@ namespace UiStudio
             }
         }
 
+        //new project
+        private void RibbonButton_NewProject(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(m_projectfolder))
+            {
+                MessageBox.Show("Please Close current project, then create new one");
+            }
+            else
+            {
+                NewFileWindow win = new NewFileWindow(m_projectfolder);
+                if (win.ShowDialog() == true)
+                {
+                    string filename = win.GetFileName("");
+                    if (!string.IsNullOrEmpty(filename))
+                    {
+                        NewDesignerFile(filename, 0);
+                    }
+                }
+
+            }
+        }
+
+        //open project
+        private void RibbonButton_OpenProject(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Ui Project|project.json";
+            if (dlg.ShowDialog() == true)
+            {
+                string path = System.IO.Path.GetDirectoryName(dlg.FileName);
+                if (System.IO.Path.GetFullPath(path).Equals(System.IO.Path.GetFullPath(m_projectfolder)))
+                {
+                    RefreshProject();
+
+                }
+                else
+                {
+                    m_projectfolder = path;
+                    RefreshProject();
+                }
+            }
+            
+        }
+        //close project
+        private void RibbonButton_CloseProject(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(m_projectfolder))
+            {
+                m_projectfolder = "";
+                RefreshProject();
+            }
+            
+        }
 
         //open
         private void RibbonButton_Open(object sender, RoutedEventArgs e)
