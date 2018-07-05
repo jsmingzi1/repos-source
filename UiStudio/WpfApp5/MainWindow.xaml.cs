@@ -209,6 +209,18 @@ namespace UiStudio
                 m_propertiespane.Content = null;
                 this.Title = "UiStudio";
             }
+            else
+            {
+                m_textbox_projectfolder.Text = m_projectfolder;
+                m_treeview_projectfolder.Items.Clear();
+                m_treeview_projectfolder.Items.Add(BuildTreeView(m_projectfolder));
+                m_treeview_projectfolder.MouseDoubleClick += new MouseButtonEventHandler(treView_MouseDoubleClick);
+                JObject o = JObject.Parse(File.ReadAllText(m_projectfolder + "\\project.json"));
+
+                // get name token of first person and convert to a string
+                string name = (string)o.SelectToken("name");
+                this.Title = "UiStudio - " + name;
+            }
             return true;
         }
 
@@ -639,14 +651,30 @@ namespace UiStudio
             }
             else
             {
-                NewFileWindow win = new NewFileWindow(m_projectfolder);
+                NewProjectWindow win = new NewProjectWindow("");
                 if (win.ShowDialog() == true)
                 {
-                    string filename = win.GetFileName("");
-                    if (!string.IsNullOrEmpty(filename))
+                    string filepath = System.IO.Path.GetFullPath(win.m_foldername.Text + "\\" + win.m_filename.Text);
+                    string filename = win.m_filename.Text;
+                    if (Directory.Exists(filepath))
                     {
-                        NewDesignerFile(filename, 0);
+                        MessageBox.Show("Path " + filepath + " Already Exists, Create Project failed!");
+                        return;
                     }
+
+                    Directory.CreateDirectory(filepath);
+                    string jsontext = "{" + Environment.NewLine +
+                        "\"name\":\"" + filename + "\"," + Environment.NewLine +
+                        "\"desc\":\"Blank Project\"," + Environment.NewLine +
+                        "\"main\":\"Main.xaml\"" + Environment.NewLine +
+                        "}";
+
+                    File.WriteAllText(filepath + "\\project.json", jsontext);
+                    //m_projectfolder = filepath;
+                    LoadProject(filepath);
+                    //File.WriteAllText(filepath + )
+                    NewDesignerFile("Main.xaml", 0);
+                    RefreshProject();
                 }
 
             }
