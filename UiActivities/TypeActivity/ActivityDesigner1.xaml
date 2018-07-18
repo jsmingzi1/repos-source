@@ -1,0 +1,35 @@
+﻿<sap:ActivityDesigner
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:sap="clr-namespace:System.Activities.Presentation;assembly=System.Activities.Presentation"
+    xmlns:sapv="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sapc="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation" xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" mc:Ignorable="d" x:Class="TypeActivity.TypeActivityDemoDesigner" Width="297" Unloaded="ActivityDesigner_Unloaded" Background="#FF2A7ED3" BorderBrush="#FF245EB9" OpacityMask="#FF245EB9" Loaded="ActivityDesigner_Loaded" Initialized="ActivityDesigner_Initialized">
+    <sap:ActivityDesigner.Resources>
+        <ResourceDictionary>
+            <sapc:ArgumentToExpressionConverter x:Key="ArgumentToExpressionConverter" />
+        </ResourceDictionary>
+    </sap:ActivityDesigner.Resources>
+    <Grid Height="149">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center" Grid.Row="0" Margin="0, 4" Width="220">
+            <Hyperlink  Click="Hyperlink_Click" FontStyle="Italic" FontSize="14"><Run Text="Click here to Capture UI Element"/></Hyperlink>
+        </TextBlock>
+        <Button Content="Test" Grid.Row="0" HorizontalAlignment="Right" Width="28" Click="Button_Click" Height="20" Margin="0, 0"/>
+        <Border Grid.Row="1" BorderThickness="2" BorderBrush="Gray">
+            <Image x:Name="img" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="283" Stretch="Fill"
+                   Source="{Binding ModeItem.ImgName, ConverterParameter=In, Converter={StaticResource ArgumentToExpressionConverter}, Mode=TwoWay}"/>
+        </Border>
+
+        <sapv:ExpressionTextBox Grid.Row="2" x:Name="textbox2" VerticalAlignment="Center" BorderThickness="2" BorderBrush="Gray" Height="30"
+            Expression="{Binding ModelItem.Text, ConverterParameter=In, Converter={StaticResource ArgumentToExpressionConverter}, Mode=TwoWay}"
+            ExpressionType="{x:Type s:String}"
+            HintText="Enter a string"
+            OwnerActivity="{Binding ModelItem}" HorizontalScrollBarVisibility="Auto" />
+
+    </Grid>
+</sap:ActivityDesigner>

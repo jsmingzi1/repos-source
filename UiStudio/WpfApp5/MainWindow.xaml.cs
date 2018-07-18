@@ -397,7 +397,7 @@ namespace UiStudio
                 foreach (var folder in Directory.GetDirectories(@".\Activities"))
                 {
                     var foldername = new DirectoryInfo(folder).Name;
-                    ToolboxCategory externalCategory = null;
+                    ToolboxCategory externalCategory = new ToolboxCategory(foldername);
 
                     foreach (var file in Directory.GetFiles(folder))
                     {
@@ -408,14 +408,11 @@ namespace UiStudio
                             var designerfile = "";
                             if (File.Exists(folder + "\\" + prefix + ".Activities.Design.dll"))
                                 designerfile = folder + "\\" + prefix + ".Activities.Design.dll";
-                            externalCategory = AddExternalActivities(foldername, file, designerfile);
+                            AddExternalActivities(externalCategory, file, designerfile);
                         }
                     }
 
-                    if (externalCategory == null)
-                        ;
-                    else
-                        ctrl.Categories.Add(externalCategory);
+                    ctrl.Categories.Add(externalCategory);
                 }
             }
 
@@ -437,9 +434,9 @@ namespace UiStudio
             return null;
         }
 
-        private ToolboxCategory AddExternalActivities(string name, string activityfilename, string designerfilename)
+        private void AddExternalActivities(ToolboxCategory category, string activityfilename, string designerfilename)
         {
-            ToolboxCategory category = new ToolboxCategory(name);
+            //ToolboxCategory category = new ToolboxCategory(name);
 
             //Assembly.LoadFrom(@".\lib\UiPath.Excel.dll"); // it will auto load depency
             
@@ -492,7 +489,7 @@ namespace UiStudio
             }
 
 
-            return category;
+            //return category;
         }
         private void AddToolBox()
         {
@@ -717,6 +714,7 @@ namespace UiStudio
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.DefaultExt = "xaml";
+            dlg.Filter = "Ui Flow|*.xaml";
             Nullable<bool> result = dlg.ShowDialog();
             if (result == true)
             {

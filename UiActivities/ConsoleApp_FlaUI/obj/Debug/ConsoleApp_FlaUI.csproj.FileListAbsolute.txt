@@ -11,3 +11,16 @@ C:\Users\lcm\source\repos\ConsoleApp_FlaUI\ConsoleApp_FlaUI\obj\Debug\ConsoleApp
 C:\Users\lcm\source\repos\ConsoleApp_FlaUI\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.csproj.CopyComplete
 C:\Users\lcm\source\repos\ConsoleApp_FlaUI\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.exe
 C:\Users\lcm\source\repos\ConsoleApp_FlaUI\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.pdb
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\ConsoleApp_FlaUI.exe.config
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\ConsoleApp_FlaUI.exe
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\ConsoleApp_FlaUI.pdb
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\FlaUI.Core.dll
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\FlaUI.UIA3.dll
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\Interop.UIAutomationClient.dll
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\FlaUI.Core.xml
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\bin\Debug\FlaUI.UIA3.xml
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.csprojResolveAssemblyReference.cache
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.csproj.CoreCompileInputs.cache
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.csproj.CopyComplete
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.exe
+D:\VS\source\repos\repos-source\UiActivities\ConsoleApp_FlaUI\obj\Debug\ConsoleApp_FlaUI.pdb
