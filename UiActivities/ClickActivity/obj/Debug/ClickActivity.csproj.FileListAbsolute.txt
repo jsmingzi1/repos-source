@@ -45,3 +45,5 @@ D:\VS\source\repos\repos-source\UiActivities\ClickActivity\obj\Debug\ClickActivi
 D:\VS\source\repos\repos-source\UiActivities\ClickActivity\obj\Debug\ClickActivity.csproj.CopyComplete
 D:\VS\source\repos\repos-source\UiActivities\ClickActivity\obj\Debug\ClickActivity.dll
 D:\VS\source\repos\repos-source\UiActivities\ClickActivity\obj\Debug\ClickActivity.pdb
+D:\VS\source\repos\repos-source\UiActivities\ClickActivity\obj\Debug\ClickActivity.Form1.resources
+D:\VS\source\repos\repos-source\UiActivities\ClickActivity\obj\Debug\ClickActivity.csproj.GenerateResource.cache

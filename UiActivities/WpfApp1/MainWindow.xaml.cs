@@ -66,7 +66,7 @@ namespace WpfApp1
             if (e1.Properties.ProcessId == Process.GetCurrentProcess().Id)
                 return;
 
-            //e1.DrawHighlight(false, System.Windows.Media.Colors.Blue, TimeSpan.FromSeconds(1.4));
+            e1.DrawHighlight(false, System.Windows.Media.Colors.Blue, TimeSpan.FromSeconds(1.4));
 
             
             //MessageBox.Show("hi");
@@ -100,37 +100,37 @@ namespace WpfApp1
             //Logger.Debug("Setting up global mouse hook");
             timer.Start();
             // Create an instance of HookProc.
-            //_globalLlMouseHookCallback = LowLevelMouseProc;
+            _globalLlMouseHookCallback = LowLevelMouseProc;
 
-            //_hGlobalLlMouseHook = NativeMethods.SetWindowsHookEx(
-            //    HookType.WH_MOUSE_LL,
-            //    _globalLlMouseHookCallback,
-            //    Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly().GetModules()[0]),
-            //    0);
-
-            //if (_hGlobalLlMouseHook == IntPtr.Zero)
-            //{
-            //    //Logger.Fatal("Unable to set global mouse hook");
-            //    throw new Win32Exception("Unable to set MouseHook");
-            //}
-
-            var mar = NativeMethods.LoadLibraryEx("useru32.dll", IntPtr.Zero, 0);
-            /////////e
-            Process curProcess = Process.GetCurrentProcess();
-            ProcessModule curModule = curProcess.MainModule;
-            _hGlobalLlKeyboardHook = NativeMethods.SetWindowsHookEx(
-                HookType.WH_KEYBOARD_LL,
-                HookCallback,
-                //Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly().GetModules()[0]),
-                //mar,
-                NativeMethods.GetModuleHandle(curModule.ModuleName),
+            _hGlobalLlMouseHook = NativeMethods.SetWindowsHookEx(
+                HookType.WH_MOUSE_LL,
+                _globalLlMouseHookCallback,
+                Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly().GetModules()[0]),
                 0);
 
-            if (_hGlobalLlKeyboardHook == IntPtr.Zero)
+            if (_hGlobalLlMouseHook == IntPtr.Zero)
             {
                 //Logger.Fatal("Unable to set global mouse hook");
-                throw new Win32Exception("Unable to set KeyHook");
+                throw new Win32Exception("Unable to set MouseHook");
             }
+
+            //var mar = NativeMethods.LoadLibraryEx("useru32.dll", IntPtr.Zero, 0);
+            ///////////e
+            //Process curProcess = Process.GetCurrentProcess();
+            //ProcessModule curModule = curProcess.MainModule;
+            //_hGlobalLlKeyboardHook = NativeMethods.SetWindowsHookEx(
+            //    HookType.WH_KEYBOARD_LL,
+            //    HookCallback,
+            //    //Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly().GetModules()[0]),
+            //    //mar,
+            //    NativeMethods.GetModuleHandle(curModule.ModuleName),
+            //    0);
+
+            //if (_hGlobalLlKeyboardHook == IntPtr.Zero)
+            //{
+            //    //Logger.Fatal("Unable to set global mouse hook");
+            //    throw new Win32Exception("Unable to set KeyHook");
+            //}
         }
 
         public int HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
@@ -354,6 +354,12 @@ namespace WpfApp1
             {
                 MessageBox.Show("left button pressed");
             }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            Form1 f = new Form1();
+            f.ShowDialog();
         }
     }
 }

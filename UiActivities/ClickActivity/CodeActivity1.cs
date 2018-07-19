@@ -66,7 +66,7 @@ namespace ClickActivity
             {
                 
                 Console.WriteLine(this.DisplayName + ":"+ex.ToString());
-                throw ex;
+                //throw ex;
             }
         }
     }

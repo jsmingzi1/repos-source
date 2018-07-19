@@ -23,3 +23,4 @@ D:\VS\source\repos\repos-source\UiActivities\TypeActivity\obj\Debug\TypeActivity
 D:\VS\source\repos\repos-source\UiActivities\TypeActivity\obj\Debug\TypeActivity.pdb
 D:\VS\source\repos\repos-source\UiActivities\TypeActivity\obj\Debug\TypeActivity.csprojResolveAssemblyReference.cache
 D:\VS\source\repos\repos-source\UiActivities\TypeActivity\obj\Debug\AC2C1ABA-CCF6-44D4-8127-588FD4D0A860-DeferredValidationErrors.xml
+D:\VS\source\repos\repos-source\UiActivities\TypeActivity\obj\Debug\TypeActivity.Form1.resources

@@ -51,7 +51,7 @@ namespace TypeActivity
                 {
 
                     Console.WriteLine(this.DisplayName + ":" + ex.ToString());
-                    throw ex;
+                    //throw ex;
                 }
             }
         }

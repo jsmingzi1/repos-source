@@ -61,3 +61,4 @@ D:\VS\source\repos\repos-source\UiActivities\WpfApp1\obj\Debug\WpfApp1.csproj.Co
 D:\VS\source\repos\repos-source\UiActivities\WpfApp1\obj\Debug\WpfApp1.csproj.CopyComplete
 D:\VS\source\repos\repos-source\UiActivities\WpfApp1\obj\Debug\WpfApp1.exe
 D:\VS\source\repos\repos-source\UiActivities\WpfApp1\obj\Debug\WpfApp1.pdb
+D:\VS\source\repos\repos-source\UiActivities\WpfApp1\obj\Debug\WpfApp1.Form1.resources

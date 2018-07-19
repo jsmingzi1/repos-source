@@ -42,6 +42,8 @@ namespace TypeActivity
         FlaUI.Core.Shapes.Rectangle LastRect = null;
 
         String LastXPath = "";
+        //timer for keyboard
+        DispatcherTimer timerKeyboard = null;
         public TypeActivityDemoDesigner()
         {
             InitializeComponent();
@@ -64,8 +66,13 @@ namespace TypeActivity
                 }
             }
 
+            timerKeyboard = new DispatcherTimer();
+            timerKeyboard.Interval = TimeSpan.FromMilliseconds(10);
+            timerKeyboard.Tick += Timer_Tick_Keyboard;
+
         }
 
+        
         //test button
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -110,6 +117,28 @@ namespace TypeActivity
             { }
         }
 
+        private void Timer_Tick_Keyboard(object sender, EventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Escape))
+            {
+                if (timer.IsEnabled)
+                {
+                    Stop();
+                    NormalizeCurrent();
+                }
+            }
+            if (Keyboard.IsKeyDown(Key.F2))
+            {
+                if (timer.IsEnabled)
+                {
+                    Stop();
+                    Form1 f = new Form1();
+                    f.ShowDialog();
+                    //Thread.Sleep(5000);
+                    Start();
+                }
+            }
+        }
 
         //start
         private void Start()
@@ -117,6 +146,8 @@ namespace TypeActivity
             SetUpHook();
             if (timer.IsEnabled == false)
                 timer.Start();
+
+            timerKeyboard.Start();
         }
 
         //stop
@@ -126,6 +157,8 @@ namespace TypeActivity
             ClearHook();
             if (timer.IsEnabled)
                 timer.Stop();
+
+            timerKeyboard.Stop();
         }
 
         private void SetUpHook()
@@ -371,7 +404,7 @@ namespace TypeActivity
             }
             else
             {
-                return GetXPath(parent) + "/" + e.ControlType + (String.IsNullOrEmpty(e.Name) ? "" : ("[@Name='" + e.Name + "']"));
+                return GetXPath(parent) + "/" + e.ControlType + (String.IsNullOrEmpty(e.Name) ? (String.IsNullOrEmpty(e.ClassName) ? "" : ("[@ClassName='" + e.ClassName + "']")) : ("[@Name='" + e.Name + "']"));
             }
         }
 
