@@ -10,3 +10,4 @@ and if get unlock.txt, it will send named pipe to cp;
 
 4. UiActivities is source code for click activity, it implements mouse click action
 
+.
