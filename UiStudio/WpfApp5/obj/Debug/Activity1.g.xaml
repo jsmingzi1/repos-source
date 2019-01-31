@@ -45,7 +45,7 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <w:Activity1.Implementation>
-    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="9xAri4X27MeCC85Dy8ln++RXP0Q6XFZTXHNvdXJjZVxyZXBvc1xyZXBvcy1zb3VyY2VcVWlTdHVkaW9cV3BmQXBwNVxBY3Rpdml0eTEueGFtbAE2AzZvAgEB" />
+    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="9xAri4X27MeCC85Dy8ln++RXQ0Y6XEdpdEh1YlxyZXBvc2l0b3JpZXNccmVwb3Mtc291cmNlXFVpU3R1ZGlvXFdwZkFwcDVcQWN0aXZpdHkxLnhhbWwBNgM2bwIBAQ==" />
   </w:Activity1.Implementation>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
