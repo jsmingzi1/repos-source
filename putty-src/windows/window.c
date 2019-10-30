@@ -2321,10 +2321,10 @@ void timer_change_notify(HWND hwnd, unsigned long next)
 	ticks = next - now;
     KillTimer(hwnd, pData->iTimer_ID/*TIMING_TIMER_ID*/);
     SetTimer(hwnd, pData->iTimer_ID/*TIMING_TIMER_ID*/, ticks, NULL);
-	if (ticks > 1000)
+	/*if (ticks > 1000)
 	{
 		TxtWrite_Cmode("killtimer, and set timer again with hwnd", hwnd, ticks);
-	}
+	}*/
 	//GET_WINDOW_DATA(hwnd);
 	if (!pData)
 		timing_next_time = next;
@@ -2383,7 +2383,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 	    unsigned long next;
 
 	    KillTimer(hwnd, window_data->iTimer_ID/*TIMING_TIMER_ID*/);
-		TxtWrite_Cmode("killtimer in wm_timer with hwnd", hwnd, 0);
+		//TxtWrite_Cmode("killtimer in wm_timer with hwnd", hwnd, 0);
 	    if (run_timers(window_data->timing_next_time, &next)) {
 		timer_change_notify(hwnd, next);
 	    } else {
