@@ -38,6 +38,7 @@ struct timer {
     void *ctx;
     unsigned long now;
     unsigned long when_set;
+	HWND hwnd;
 };
 
 static tree234 *timers = NULL;
@@ -129,6 +130,7 @@ unsigned long schedule_timer(HWND hwnd, int ticks, timer_fn_t fn, void *ctx)
     t->ctx = ctx;
     t->now = when;
     t->when_set = now;
+	t->hwnd = hwnd;
 
     if (t != add234(timers, t)) {
 	sfree(t);		       /* identical timer already exists */
@@ -136,7 +138,15 @@ unsigned long schedule_timer(HWND hwnd, int ticks, timer_fn_t fn, void *ctx)
 	add234(timer_contexts, t->ctx);/* don't care if this fails */
     }
 
-    first = (struct timer *)index234(timers, 0);
+	//the old logic, only the new added timer is the first one, it will notify immediately
+	//but when there're two windows, the disconnect timer maybe still exist in the queue, it will make problem
+	//so the new logic, get first timer, only get the window its own timer
+	int idx = 0;
+    first = (struct timer *)index234(timers, idx);
+	while (first && first->hwnd != hwnd) {
+		idx++;
+		first = (struct timer*)index234(timers, idx);
+	}
     if (first == t) {
 	/*
 	 * This timer is the very first on the list, so we must

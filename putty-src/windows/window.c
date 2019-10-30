@@ -2281,7 +2281,7 @@ static void win_seat_notify_remote_exit(Seat *seat)
 }
 
 static FILE* fid = NULL;
-void TxtWrite_Cmode(char *str, int value)
+void TxtWrite_Cmode(char *str, int str1, int value)
 {
 	//准备数据
 	int index[50];
@@ -2294,7 +2294,7 @@ void TxtWrite_Cmode(char *str, int value)
 	}
 	//写出txt
 	if (fid == NULL)
-		fid = fopen("c:\\ws\\putty_output.txt", "w");
+		fid = fopen("c:\\ws\\putty_output.txt", "a");
 	if (fid == NULL)
 	{
 		printf("写出文件失败！\n");
@@ -2302,10 +2302,10 @@ void TxtWrite_Cmode(char *str, int value)
 	}
 	for (int i = 0; i < 50; i++)
 	{
-		fprintf(fid, "%s: %d\n", str, value);
+		fprintf(fid, "%s: %d: %d\n", str, str1, value);
 	}
-	//fclose(fid);
-
+	fclose(fid);
+	fid = NULL;
 }
 
 void timer_change_notify(HWND hwnd, unsigned long next)
@@ -2321,12 +2321,16 @@ void timer_change_notify(HWND hwnd, unsigned long next)
 	ticks = next - now;
     KillTimer(hwnd, pData->iTimer_ID/*TIMING_TIMER_ID*/);
     SetTimer(hwnd, pData->iTimer_ID/*TIMING_TIMER_ID*/, ticks, NULL);
+	if (ticks > 1000)
+	{
+		TxtWrite_Cmode("killtimer, and set timer again with hwnd", hwnd, ticks);
+	}
 	//GET_WINDOW_DATA(hwnd);
 	if (!pData)
 		timing_next_time = next;
 	else
 		pData->timing_next_time = next;
-	TxtWrite_Cmode("timer_change_notify ticks", ticks);
+	//TxtWrite_Cmode("timer_change_notify ticks", ticks);
 	
 }
 
@@ -2379,10 +2383,11 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 	    unsigned long next;
 
 	    KillTimer(hwnd, window_data->iTimer_ID/*TIMING_TIMER_ID*/);
+		TxtWrite_Cmode("killtimer in wm_timer with hwnd", hwnd, 0);
 	    if (run_timers(window_data->timing_next_time, &next)) {
 		timer_change_notify(hwnd, next);
 	    } else {
-			int a;
+			assert(0);
 	    }
 	}
 	return 0;
@@ -2402,6 +2407,8 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 	{
 		  if (window_nodes) {
 			  GET_WINDOW_DATA(hwnd);
+			  if (pData && pData->session_closed==false)
+				close_session(pData->win_seat->termwin);
 			  //PWindowData windowdata = get_mapchain_value(window_nodes, hwnd);
 			  deinit_fonts(hwnd);
 			  free(pData);
@@ -3474,8 +3481,9 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 		} else break; /* pass to Windows for default processing */
 	    } else {
 		len = TranslateKey(hwnd, message, wParam, lParam, buf);
+		//TxtWrite_Cmode(buf, lParam, len);
 		if (len == -1)
-		    return DefWindowProcW(hwnd, message, wParam, lParam);
+			return DefWindowProcW(hwnd, message, wParam, lParam);
 
 		if (len != 0) {
 		    /*
@@ -4870,8 +4878,8 @@ static int TranslateKey(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam,
 	if (osPlatformId == VER_PLATFORM_WIN32_NT && p_ToUnicodeEx) {
 	    r = p_ToUnicodeEx(wParam, scan, keystate, keys_unicode,
                               lenof(keys_unicode), 0, kbd_layout);
-		TxtWrite_Cmode("osplatform win32nt wParam", wParam);
-		TxtWrite_Cmode("osplatform win32nt r", r);
+		//TxtWrite_Cmode("osplatform win32nt wParam", wParam);
+		//TxtWrite_Cmode("osplatform win32nt r", r);
 	} else {
 	    /* XXX 'keys' parameter is declared in MSDN documentation as
 	     * 'LPWORD lpChar'.
@@ -4894,8 +4902,8 @@ static int TranslateKey(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam,
 	        MultiByteToWideChar(CP_ACP, 0, (LPCSTR)keysb, r,
                                     keys_unicode, lenof(keys_unicode));
 	    }
-		TxtWrite_Cmode("osplatform win32nt else", wParam);
-		TxtWrite_Cmode("osplatform win32nt else", r);
+		//TxtWrite_Cmode("osplatform win32nt else", wParam);
+		//TxtWrite_Cmode("osplatform win32nt else", r);
 	}
 #ifdef SHOW_TOASCII_RESULT
 	if (r == 1 && !key_down) {
