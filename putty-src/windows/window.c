@@ -132,6 +132,11 @@ typedef struct WindowData {
 	struct unicode_data ucsdata;
 	HICON trust_icon;
 	Seat* win_seat;
+	bool session_closed;
+	int kbd_codepage;
+	Ldisc* ldisc;
+	long timing_next_time;
+	int iTimer_ID;
 } WindowData, *PWindowData;
 static pmap_node window_nodes = NULL;
 //window_nodes is a chain, it keeps the window handle mapping to other data
@@ -147,7 +152,7 @@ static void init_palette(HWND);
 static void init_fonts(HWND hwnd, int, int);
 static void another_font(HWND, int);
 static void deinit_fonts(HWND);
-static void set_input_locale(HKL);
+static void set_input_locale(HWND, HKL);
 static void update_savedsess_menu(void);
 static void init_winfuncs(void);
 
@@ -173,13 +178,13 @@ static bool get_fullscreen_rect(HWND, RECT * ss);
 
 //static int caret_x = -1, caret_y = -1;
 
-static int kbd_codepage;
+//static int kbd_codepage;
 
-static Ldisc *ldisc;
+//static Ldisc *ldisc;
 //static Backend *backend;
 
 //static struct unicode_data ucsdata;
-static bool session_closed;
+//static bool session_closed;
 static bool reconfiguring = false;
 
 static const SessionSpecial *specials = NULL;
@@ -187,6 +192,7 @@ static HMENU specials_menu = NULL;
 static int n_specials = 0;
 
 #define TIMING_TIMER_ID 1234
+int iStart_Timer_ID = 1235;
 static long timing_next_time;
 
 static struct {
@@ -425,7 +431,8 @@ static void start_backend(TermWin* wintw)
     const char *title;
     char *realhost;
     int i;
-
+	assert(wintw->hWnd);
+	GET_WINDOW_DATA(wintw->hWnd);
     /*
      * Select protocol. This is farmed out into a table in a
      * separate file to enable an ssh-free variant.
@@ -439,8 +446,8 @@ static void start_backend(TermWin* wintw)
 	cleanup_exit(wintw->hWnd, 1);
     }
 
-	assert(wintw->hWnd);
-	PWindowData pData = get_mapchain_value(window_nodes, wintw->hWnd);
+	
+	//PWindowData pData = get_mapchain_value(window_nodes, wintw->hWnd);
     seat_set_trust_status(pData->win_seat, true);
     error = backend_init(vt, pData->win_seat, &(pData->backend), logctx, conf,
                          conf_get_str(conf, CONF_host),
@@ -476,7 +483,7 @@ static void start_backend(TermWin* wintw)
     /*
      * Set up a line discipline.
      */
-    ldisc = ldisc_create(conf, pData->term, pData->backend, pData->win_seat);
+	pData->ldisc = ldisc_create(conf, pData->term, pData->backend, pData->win_seat);
 
     /*
      * Destroy the Restart Session menu item. (This will return
@@ -489,7 +496,7 @@ static void start_backend(TermWin* wintw)
 	DeleteMenu(popup_menus[i].menu, IDM_RESTART, MF_BYCOMMAND);
     }
 
-    session_closed = false;
+    pData->session_closed = false;
 
     sfree(title_to_free);
 }
@@ -499,16 +506,16 @@ static void close_session(TermWin* wintw)
     char *newtitle;
     int i;
 	assert(wintw);
-    session_closed = true;
+	GET_WINDOW_DATA(wintw->hWnd);
+	pData->session_closed = true;
     newtitle = dupprintf("%s (inactive)", appname);
     win_set_icon_title(wintw, newtitle);
     win_set_title(wintw, newtitle);
     sfree(newtitle);
 
-	PWindowData pData = get_mapchain_value(window_nodes, wintw->hWnd);
-    if (ldisc) {
-	ldisc_free(ldisc);
-	ldisc = NULL;
+    if (pData->ldisc) {
+	ldisc_free(pData->ldisc);
+	pData->ldisc = NULL;
     }
     if (pData->backend) {
         backend_free(pData->backend);
@@ -528,7 +535,7 @@ static void close_session(TermWin* wintw)
     }
 }
 
-int NewWindow(LPSTR cmdline, int show);
+int NewWindow( int show);
 int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 {
 	MSG msg;
@@ -763,8 +770,8 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 
 		prepare_session(conf);
 	}
-	NewWindow(cmdline, show);
-	NewWindow(cmdline, show);
+	NewWindow(show);
+	NewWindow(show);
 	while (1) {
 		HANDLE* handles;
 		int nhandles, n;
@@ -850,7 +857,7 @@ finished:
 	return msg.wParam;		       /* ... but optimiser doesn't know */
 	//return 0;
 }
-int NewWindow(LPSTR cmdline, int show)
+int NewWindow(int show)
 {
     
     int guess_width, guess_height;
@@ -928,6 +935,7 @@ int NewWindow(LPSTR cmdline, int show)
      * for font_{width,height}.
      */
 	PWindowData pData = get_mapchain_value(window_nodes, hwnd);
+	pData->iTimer_ID = iStart_Timer_ID++;
 	pData->extra_height = extra_height;
 	pData->extra_width = extra_width;
 	pData->flashing = false;
@@ -1077,7 +1085,7 @@ int NewWindow(LPSTR cmdline, int show)
     /*
      * Set up the initial input locale.
      */
-    set_input_locale(GetKeyboardLayout(0));
+    set_input_locale(hwnd, GetKeyboardLayout(0));
 
     /*
      * Finally show the window!
@@ -2162,14 +2170,14 @@ static void reset_window(HWND hwnd, int reinit) {
     }
 }
 
-static void set_input_locale(HKL kl)
+static void set_input_locale(HWND hwnd, HKL kl)
 {
     char lbuf[20];
 
     GetLocaleInfo(LOWORD(kl), LOCALE_IDEFAULTANSICODEPAGE,
 		  lbuf, sizeof(lbuf));
-
-    kbd_codepage = atoi(lbuf);
+	GET_WINDOW_DATA(hwnd);
+    pData->kbd_codepage = atoi(lbuf);
 }
 
 static void click(HWND hwnd, Mouse_Button b, int x, int y,
@@ -2250,7 +2258,7 @@ static void win_seat_notify_remote_exit(Seat *seat)
     int exitcode, close_on_exit;
 
 	PWindowData pData = get_mapchain_value(window_nodes, seat->hWnd);
-    if (!session_closed &&
+    if (!pData->session_closed &&
         (exitcode = backend_exitcode(pData->backend)) >= 0) {
 	close_on_exit = conf_get_int(conf, CONF_close_on_exit);
 	/* Abnormal exits will already have set session_closed and taken
@@ -2261,7 +2269,7 @@ static void win_seat_notify_remote_exit(Seat *seat)
 		PostMessage(seat->hWnd, WM_CLOSE, 0, 0);
 	} else {
             queue_toplevel_callback(close_session, seat->termwin);
-	    session_closed = true;
+			pData->session_closed = true;
 	    /* exitcode == INT_MAX indicates that the connection was closed
 	     * by a fatal error, so an error box will be coming our way and
 	     * we should not generate this informational one. */
@@ -2272,17 +2280,54 @@ static void win_seat_notify_remote_exit(Seat *seat)
     }
 }
 
+static FILE* fid = NULL;
+void TxtWrite_Cmode(char *str, int value)
+{
+	//准备数据
+	int index[50];
+	double x_pos[50], y_pos[50];
+	for (int i = 0; i < 50; i++)
+	{
+		index[i] = i;
+		x_pos[i] = rand() % 1000 * 0.01;
+		y_pos[i] = rand() % 2000 * 0.01;
+	}
+	//写出txt
+	if (fid == NULL)
+		fid = fopen("c:\\ws\\putty_output.txt", "w");
+	if (fid == NULL)
+	{
+		printf("写出文件失败！\n");
+		return;
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		fprintf(fid, "%s: %d\n", str, value);
+	}
+	//fclose(fid);
+
+}
+
 void timer_change_notify(HWND hwnd, unsigned long next)
 {
+	GET_WINDOW_DATA(hwnd);
+	if (pData == NULL)
+		return;
     unsigned long now = GETTICKCOUNT();
     long ticks;
     if (now - next < INT_MAX)
 	ticks = 0;
     else
 	ticks = next - now;
-    KillTimer(hwnd, TIMING_TIMER_ID);
-    SetTimer(hwnd, TIMING_TIMER_ID, ticks, NULL);
-    timing_next_time = next;
+    KillTimer(hwnd, pData->iTimer_ID/*TIMING_TIMER_ID*/);
+    SetTimer(hwnd, pData->iTimer_ID/*TIMING_TIMER_ID*/, ticks, NULL);
+	//GET_WINDOW_DATA(hwnd);
+	if (!pData)
+		timing_next_time = next;
+	else
+		pData->timing_next_time = next;
+	TxtWrite_Cmode("timer_change_notify ticks", ticks);
+	
 }
 
 static void conf_cache_data(int* cursor_type, int* vtmode)
@@ -2330,13 +2375,14 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 
     switch (message) {
       case WM_TIMER:
-	if ((UINT_PTR)wParam == TIMING_TIMER_ID) {
+	if ((UINT_PTR)wParam == window_data->iTimer_ID/*TIMING_TIMER_ID*/) {
 	    unsigned long next;
 
-	    KillTimer(hwnd, TIMING_TIMER_ID);
-	    if (run_timers(timing_next_time, &next)) {
+	    KillTimer(hwnd, window_data->iTimer_ID/*TIMING_TIMER_ID*/);
+	    if (run_timers(window_data->timing_next_time, &next)) {
 		timer_change_notify(hwnd, next);
 	    } else {
+			int a;
 	    }
 	}
 	return 0;
@@ -2370,7 +2416,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 	    char *str;
 	    show_mouseptr(true);
 	    str = dupprintf("%s Exit Confirmation", appname);
-	    if (session_closed || !conf_get_bool(conf, CONF_warn_on_close) ||
+	    if (window_data->session_closed || !conf_get_bool(conf, CONF_warn_on_close) ||
 		MessageBox(hwnd,
 			   "Are you sure you want to close this session?",
 			   str, MB_ICONWARNING | MB_OKCANCEL | MB_DEFBUTTON1)
@@ -2550,9 +2596,9 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 		 * Flush the line discipline's edit buffer in the
 		 * case where local editing has just been disabled.
 		 */
-		if (ldisc) {
-                    ldisc_configure(ldisc, conf);
-		    ldisc_echoedit_update(ldisc);
+		if (window_data->ldisc) {
+                    ldisc_configure(window_data->ldisc, conf);
+		    ldisc_echoedit_update(window_data->ldisc);
                 }
 		if (pal)
 		    DeleteObject(pal);
@@ -2698,8 +2744,8 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 	    break;
 	  case IDM_RESET:
 	    term_pwron(window_data->term, true);
-	    if (ldisc)
-		ldisc_echoedit_update(ldisc);
+	    if (window_data->ldisc)
+		ldisc_echoedit_update(window_data->ldisc);
 	    break;
 	  case IDM_ABOUT:
 	    showabout(hwnd);
@@ -3449,7 +3495,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
       case WM_INPUTLANGCHANGE:
 	/* wParam == Font number */
 	/* lParam == Locale */
-	set_input_locale((HKL)lParam);
+	set_input_locale(hwnd, (HKL)lParam);
 	sys_cursor_update(hwnd);
 	break;
       case WM_IME_STARTCOMPOSITION:
@@ -3486,7 +3532,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 		 * instead we send the characters one by one.
 		 */
 		/* don't divide SURROGATE PAIR */
-		if (ldisc) {
+		if (window_data->ldisc) {
                     for (i = 0; i < n; i += 2) {
 			WCHAR hs = *(unsigned short *)(buff+i);
 			if (IS_HIGH_SURROGATE(hs) && i+2 < n) {
@@ -3514,11 +3560,11 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 
 	    buf[1] = wParam;
 	    buf[0] = wParam >> 8;
-            term_keyinput(window_data->term, kbd_codepage, buf, 2);
+            term_keyinput(window_data->term, window_data->kbd_codepage, buf, 2);
 	} else {
 	    char c = (unsigned char) wParam;
 	    term_seen_key_event(window_data->term);
-            term_keyinput(window_data->term, kbd_codepage, &c, 1);
+            term_keyinput(window_data->term, window_data->kbd_codepage, &c, 1);
 	}
 	return (0);
       case WM_CHAR:
@@ -4824,6 +4870,8 @@ static int TranslateKey(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam,
 	if (osPlatformId == VER_PLATFORM_WIN32_NT && p_ToUnicodeEx) {
 	    r = p_ToUnicodeEx(wParam, scan, keystate, keys_unicode,
                               lenof(keys_unicode), 0, kbd_layout);
+		TxtWrite_Cmode("osplatform win32nt wParam", wParam);
+		TxtWrite_Cmode("osplatform win32nt r", r);
 	} else {
 	    /* XXX 'keys' parameter is declared in MSDN documentation as
 	     * 'LPWORD lpChar'.
@@ -4846,6 +4894,8 @@ static int TranslateKey(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam,
 	        MultiByteToWideChar(CP_ACP, 0, (LPCSTR)keysb, r,
                                     keys_unicode, lenof(keys_unicode));
 	    }
+		TxtWrite_Cmode("osplatform win32nt else", wParam);
+		TxtWrite_Cmode("osplatform win32nt else", r);
 	}
 #ifdef SHOW_TOASCII_RESULT
 	if (r == 1 && !key_down) {
